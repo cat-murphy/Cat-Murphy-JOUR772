@@ -252,4 +252,4 @@ No code here; I want you to provide three questions that this data suggests to y
 
 2.  There are entire departments called "Anti-Black Racism" and "Museum Scholarship and Material Culture," but each only have one class. What are these classes? What are the course descriptions? Who is the professor?
 
-3.  How many of the classes are 500-level classes or higher? Is there is a noticeable difference in the median number of seats between undegraduate classes and graduate classes? In other words, do graduate classes tend to be smaller, larger or around the same size? Does this differ by department?
+3.  How many of the classes are 500-level classes or higher? Is there is a noticeable difference in the median number of seats between undergraduate classes and graduate classes? In other words, do graduate classes tend to be smaller, larger or around the same size? Does this differ by department?

@@ -52,13 +52,19 @@ umd_courses |>
 
 ```
 
-**A1**
+**A1:** The courses in the Engineering, Cooperative Education department have by far the highest mean number of seats at over 300. I think the First-Year Innovation
 
 ------------------------------------------------------------------------
 
 ### **Q2** Find out the greatest number of times any individual class has been offered in our dataset. You must show the greatest number of classes first.
 
 ```{r}
+umd_courses |>
+  group_by(title) |>
+  summarise(
+    count_classes = n()
+  ) |>
+  arrange(desc(count_classes)) 
 
 ```
 
@@ -69,7 +75,12 @@ umd_courses |>
 ### **Q3** Count the number of courses for each instructor and department. Which instructor has taught the most?
 
 ```{r}
-
+umd_courses |>
+  group_by(instructors, department) |>
+  summarise(
+    count_classes = n()
+  ) |>
+  arrange(desc(count_classes))
 ```
 
 **A3**
@@ -79,7 +90,13 @@ umd_courses |>
 ### **Q4** Given the results for Q3, what would have made it easier to find the answer? You don't have to know *how* to accomplish this; I want you to describe in words what would make the answer easier to see.
 
 ```{r}
-
+umd_courses |>
+  group_by(instructors, department) |>
+  summarise(
+    count_classes = n()
+  ) |>
+  arrange(desc(count_classes)) |>
+  na.omit(instructors)
 ```
 
 **A4**
@@ -88,8 +105,160 @@ umd_courses |>
 
 ### **Q5** Take one of the questions you listed in the final question of the pre_lab and try to answer it here in code. If you don't know how to fully answer it, write what code you can and describe in words what else you would need to do. If you got an answer, is it interesting?
 
-```{r}
+**A5:**
 
+I decided to tackle the following questions:
+
+"How many of the classes are 500-level classes or higher? Do graduate classes tend to be smaller, larger or around the same size as undergraduate classes? Does this differ by department?"
+
+The first part of this, I needed to separate the characters from the numbers in the course codes (column "id"), so I did ask ChatGPT to help.
+
+**Here's what I put in**:
+
+*hi chat gpt, i have a data frame in r that has both characters and numbers, how do i separate it into two columns, one with only characters and the other with only numbers?*
+
+**Here's what it spit out**:
+
+*To separate a column containing both characters and numbers into two separate columns (one for characters and one for numbers) in R, you can use a combination of regular expressions and the `dplyr` package (or base R if you prefer).*
+
+*Here’s how you can do it using `dplyr` and `tidyr`:*
+
+### *Example Data*
+
+``` r
+# Sample data frame
+df <- data.frame(mixed_column = c("abc123", "def456", "ghi789"))
 ```
 
-**A5**
+### *Using `dplyr` and `tidyr`*
+
+``` r
+library(dplyr)
+library(tidyr)
+
+# Separate characters and numbers into two columns
+df_separated <- df %>%
+  mutate(char_column = gsub("[0-9]", "", mixed_column),  # Remove numbers to extract characters
+         num_column = as.numeric(gsub("[^0-9]", "", mixed_column)))  # Remove characters to extract numbers
+
+print(df_separated)
+```
+
+### *Explanation:*
+
+1.  ***`gsub("[0-9]", "", mixed_column)`**: This removes all the numbers from the `mixed_column`, leaving only the characters.*
+2.  ***`gsub("[^0-9]", "", mixed_column)`**: This removes all non-numeric characters, leaving only the numbers.*
+3.  ***`as.numeric()`**: This converts the extracted numeric strings into actual numbers.*
+
+### *Output:*
+
+``` r
+  mixed_column char_column num_column
+1       abc123         abc        123
+2       def456         def        456
+3       ghi789         ghi        789
+```
+
+*If you prefer to use **base R** instead:*
+
+``` r
+df$char_column <- gsub("[0-9]", "", df$mixed_column)
+df$num_column <- as.numeric(gsub("[^0-9]", "", df$mixed_column))
+
+print(df)
+```
+
+*This should give you the desired result of separating characters and numbers into two columns.*
+
+From this information I learned:
+
+-   The function gsub() function will substitute a string for another string
+
+-   The gsub() function requires a pattern, a replacement and a vector
+
+Using all that info, I used this code to create a new data set called "umd_separated" with new categories called "course_code_chr" and "course_code_num"
+
+```{r}
+umd_separated <- umd_courses |>
+  mutate(
+    course_code_chr = gsub("[0-9]", "", id),
+    course_code_num = gsub("[^0-9]", "", id)
+  )
+```
+
+-   The course_code_chr = gsub("[0-9], "", id) means:
+
+    -   create a column called "course_code_chr"
+
+    -   the pattern "[0-9]" tells R to look at all the numbers
+
+    -   the replacement "" tells R to replace them all with nothing — essentially telling R to delete them, leaving just the characters
+
+    -   the vector "id" tells R to do this all to the data in the "id" column
+
+-   Likewise, course_code_num = gsub("[\^0-9]", "", id) tells R to look at all the non-number characters in the "id" column, replace them with nothing and put what remains — so, just the course code numbers — in a column called "course_code_num"
+
+I then used the textbook to learn how to do the second part of this.
+
+Chapter 11.2 of the textbook includes this example for the case_when() function:
+
+```{r}
+maryland_winred_categories <- maryland_winred_contributions |>
+  mutate(
+    amount_category = case_when(
+        amount < 100 ~ "Less than $100",
+        amount >= 100 & amount < 500 ~ "Between $100 and $499",
+        amount >= 500 & amount < 1500 ~ "Between $500 and $1499",
+        amount >= 1500 & amount < 3000 ~ "Between $500 and $2999",
+        amount >= 3000 ~ "$3,000 or more"
+      )
+  )
+```
+
+I used this example to mutate my own data and create categories for undergraduate and graduate classes.
+
+```{r}
+umd_course_levels <- umd_separated |>
+  mutate(
+    course_code_category = case_when(
+        course_code_num < 500 ~ "undergraduate",
+        course_code_num >= 500 & course_code_num < 900 ~ "graduate")
+  )
+```
+
+Here, I'm telling R to:
+
+-   create a new data set from "umd_separated" — the new data set I just created to separate the course code numbers from the characters — and call the new data set "umd_course_levels"
+
+-   prepare to mutate some data in a new column called "course_code_category"
+
+-   in the new "course_code_category" column:
+
+    -   categorize all the numbers below 500 in the "course_code_num" column as "undergraduate"
+
+    -   categorize all the numbers between 500 and 900 in the "course_code_num" column as "graduate"
+
+OK, and to actually answer the question, I used what we learned in class:
+
+```{r}
+umd_course_levels |>
+  group_by(course_code_category) |>
+  summarise(
+    count_course_level = n(),
+    mean_seats = mean(seats),
+    median_seats = median(seats)
+  ) |>
+  arrange(desc(median_seats))
+```
+
+Here, I'm telling R to:
+
+-   look at the data set "umd_course_levels"
+
+-   group the data by the course code category
+
+-   summarize the data by:
+
+    -   counting the number of graduate and undergraduate classes
+
+    -   calculating the mean and median number of seats for undergraduate and graduate classes

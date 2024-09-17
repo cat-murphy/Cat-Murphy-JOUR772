@@ -52,7 +52,7 @@ umd_courses |>
 
 ```
 
-**A1:** The courses in the Engineering, Cooperative Education department have by far the highest mean number of seats at over 300. I think the First-Year Innovation
+**A1:** The courses in the Engineering, Cooperative Education department have by far the highest mean number of seats at over 300. I think it's more interesting to me that the mean number of seats for the Engineering, Cooperative Education department is *so* much higher than the department with the second-highest mean. I also find it interesting that many of the science departments — chemistry, life sciences, biological sciences, physics, etc. — have such large classes (a mean of 60+ students). With that many students in one class, how do you even learn? How can you hear the professor teach? How long does attendance take? And it's science, too — how do you do labs? It just blows my mind that anyone could learn chemistry in a room with 100 people.
 
 ------------------------------------------------------------------------
 
@@ -68,9 +68,7 @@ umd_courses |>
 
 ```
 
-**A2**
-
-------------------------------------------------------------------------
+**A2:** 1,303 times — Doctoral Dissertation Research
 
 ### **Q3** Count the number of courses for each instructor and department. Which instructor has taught the most?
 
@@ -83,7 +81,7 @@ umd_courses |>
   arrange(desc(count_classes))
 ```
 
-**A3**
+**A3**: Keith Yearwood
 
 ------------------------------------------------------------------------
 
@@ -99,7 +97,22 @@ umd_courses |>
   na.omit(instructors)
 ```
 
-**A4**
+**A4:** Because there are so many courses without a listed instructor, you have to scroll through 80 rows of data before identifying Keith Yearwood as the professor who has taught the greatest number of classes. So, put simply, finding the answer to Q3 would be much easier if all the courses without a listed instructor — all the NAs — were excluded from the summarized data set.
+
+A very quick Google search informed me about na.omit, so I tried that with the instructor column, and it seemed to work relatively well. Although the courses with "Instructor: TBA" listed as the course instructor still appear in this summarized data set, using na.omit definitely made the data considerably easier to interpret.
+
+...
+
+As a quick aside ... this is only true given the terms of the question, which asks for the number of courses for each instructor *and* *department*. If you include professors who teach in more than one department, Keith Yearwood has actually taught the fourth-most. Elsa Barkley Brown has actually taught the greatest number of classes in our data set (73), followed by Jason Kuo (71) and Manoj Franklin (70). However, the above calculation doesn't show this because they each teach in classes in several different departments, a few of which have been renamed and thus are categorized separately. And, technically, Manoj Franklin has taught a greater number of classes than any of them (83), but this isn't immediately clear because he has co-taught several courses.
+
+```{r}
+umd_courses |>
+  group_by(instructors) |>
+  summarise(
+    count_classes = n()
+  ) |>
+  arrange(desc(count_classes))
+```
 
 ------------------------------------------------------------------------
 
@@ -109,7 +122,7 @@ umd_courses |>
 
 I decided to tackle the following questions:
 
-"How many of the classes are 500-level classes or higher? Do graduate classes tend to be smaller, larger or around the same size as undergraduate classes? Does this differ by department?"
+**"How many of the classes are 500-level classes or higher? Do graduate classes tend to be smaller, larger or around the same size as undergraduate classes? Does this differ by department?"**
 
 The first part of this, I needed to separate the characters from the numbers in the course codes (column "id"), so I did ask ChatGPT to help.
 
@@ -251,7 +264,18 @@ umd_course_levels |>
   arrange(desc(median_seats))
 ```
 
-Here, I'm telling R to:
+```{r}
+umd_course_levels |>
+  group_by(course_code_category, department) |>
+  summarise(
+    count_courses = n(),
+    mean_seats = mean(seats),
+    median_seats = median(seats)
+  ) |>
+  arrange(desc(median_seats))
+```
+
+In the first chunk, I'm telling R to:
 
 -   look at the data set "umd_course_levels"
 
@@ -262,3 +286,19 @@ Here, I'm telling R to:
     -   counting the number of graduate and undergraduate classes
 
     -   calculating the mean and median number of seats for undergraduate and graduate classes
+
+In the second chunk, everything is the same EXCEPT I'm telling R to group the data by both course_code_category and department.
+
+In sum:
+
+-   **How many of the classes are 500-level classes or higher?**
+
+    -   24,007
+
+-   **Do graduate classes tend to be smaller, larger or around the same size as undergraduate classes?**
+
+    -   Graduate-level classes, which have an average of 18 seats and a median of 12 seats, tend to be much smaller than undergraduate-level classes, which have an average of 59 seats and a median of 30 seats.
+
+-   **Does this differ by department?**
+
+    -   Yes. While most departments offer larger undergraduate classes and smaller graduate classes, the graduate courses in some departments — like the Data Science & Analytics department — are larger than the undergraduate courses. Likewise, there are some departments — like the Greek and Music Performance departments — that have incredibly small undergraduate classes with a median of 5 seats.

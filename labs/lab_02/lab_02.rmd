@@ -61,7 +61,7 @@ climate_courses |>
 a)  26 departments have offered classes with "climate" in the title
 
 b)  The department of Atmospheric and Oceanic Science has offered the
-    greatest number of climate-related classes (68)
+    most climate-related classes (68)
 
 ------------------------------------------------------------------------
 
@@ -240,8 +240,7 @@ a)  32 courses focus on social justice
 b)  8 departments offer courses on social justice
 
 c)  Geographical Sciences and Education Counseling and Personnel
-    Services both offer the greatest number of social justice courses
-    (7)
+    Services are tied for most social justice courses (7)
 
 d)  20 classes are taught at the undergraduate level, 12 at the graduate
     level

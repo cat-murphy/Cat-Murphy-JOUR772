@@ -4,6 +4,9 @@ author: "Derek Willis"
 adapted by: "Daniel Trielli"
 date: "2024-05-23"
 output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
@@ -24,7 +27,8 @@ library(lubridate)
 
 ## Load Data
 
-Let's keep working with the UMD courses and Maryland campaign expense data we used in the pre_lab.
+Let's keep working with the UMD courses and Maryland campaign expense
+data we used in the pre_lab.
 
 ```{r}
 umd_courses <- read_rds("data/umd_courses.rds")
@@ -42,6 +46,7 @@ climate_courses <- umd_courses |>
 
 nrow(climate_courses)
 ```
+
 ```{r}
 climate_courses |>
   group_by(department) |>
@@ -51,8 +56,12 @@ climate_courses |>
   arrange(desc(count_climate_courses))
 ```
 
+**A1:**
 
-**A1**
+a)  26 departments have offered classes with "climate" in the title
+
+b)  The department of Atmospheric and Oceanic Science has offered the
+    greatest number of climate-related classes (68)
 
 ------------------------------------------------------------------------
 
@@ -71,8 +80,6 @@ fall_2023_courses |>
     count_fall_2023_courses = n()
   ) |>
   arrange(desc(count_fall_2023_courses))
-
-head(fall_2023_courses)
 ```
 
 ```{r}
@@ -80,14 +87,47 @@ fall_2023_courses |>
   filter(syllabus_count >= 1) |>
   group_by(department) |>
   summarise(
-    sum_syllabus_count = sum(syllabus_count),
-    fall_2023_courses_with_syllabus = n()
+    fall_2023_courses_with_syllabus = n(),
+    sum_syllabus_count = sum(syllabus_count)
+  ) |>
+  arrange(desc(fall_2023_courses_with_syllabus))
+```
+
+```{r}
+fall_2023_courses |>
+  filter(syllabus_count >= 1) |>
+  group_by(department) |>
+  summarise(
+    fall_2023_courses_with_syllabus = n(),
+    sum_syllabus_count = sum(syllabus_count)
   ) |>
   arrange(desc(sum_syllabus_count))
 ```
 
+**A2:**
 
-**A2**
+a)  **Business and Management** (164), **School of Music** (137) and
+    **English** (120) have the most courses in the fall 2023 term
+
+b)  There are 125 departments with at least one syllabus posted for fall
+    2023, compared to the 189 departments that have courses in the fall
+    2023 term
+
+c)  **Business and Management** has the most courses with at least one
+    syllabus posted (82), but the second-most syllabuses posted overall
+    (256). **Economics** - despite only having the 14th-most classes in
+    fall 2023 - has the most syllabuses posted overall (331) and the
+    second-most classes with at least one syllabus posted (50). The
+    **School of Music**, which has the second-most classes, has the
+    third-most classes with at least one syllabus posted (48) and the
+    eighth-most syllabuses posted overall (92). **English**, meanwhile,
+    has the third-most courses in fall 2023 but only the 43rd-most
+    classes with at least one syllabus posted (8) and 36th-most
+    syllabuses posted overall (23).
+
+d)  **Journalism** has the sixth-most classes in fall 2023, but is
+    ranked 38th in most classes with at least one syllabus posted and
+    40th in most syllabuses posted overall (18).
 
 ------------------------------------------------------------------------
 
@@ -110,24 +150,98 @@ maryland_expenses |>
   arrange(month)
 ```
 
-**A3**
+**A3:** Wes Moore's fundraising committee generally spent between
+\$210,000 and \$275,000 for the first six months of the 18-month
+campaign before ramping up spending in early 2022. The committee then
+spent upwards of \$500,000 a month between April 2022 and September 2022
+— including over \$1 million in both June and July — before spending
+\$3.1 million in the final month leading up to the election.
 
 ------------------------------------------------------------------------
 
 ### **Q4** Using case_when(), create a column in the Maryland expenses data called `spending_location` indicating whether each record indicated money spent in Maryland or outside Maryland. For records that are in Maryland, make the new column's value "In-state" and for the others, make it "Out of state". Then write code that shows the total amount of money spent in each category and describe the results. You can do this in one statement or break it up into two statements (saving the new column to your dataframe).
 
 ```{r}
-
+maryland_expenses_with_state = maryland_expenses |>
+  mutate(
+    spending_location = case_when(
+      str_detect(address, " Maryland ") ~ "in-state",
+      !str_detect(address, " Maryland ") ~ "out of state",
+      .default = "no address"
+    )
+  )
 ```
 
-**A4**
+```{r}
+maryland_expenses_with_state |>
+  group_by(spending_location) |>
+  summarise(
+    count_expenses = n(),
+    amount = sum(amount, na.rm = TRUE)
+  )
+```
+
+**A4:** Committees spent the majority of their money in-state, making
+51,801 purchases worth \$77.7 million in Maryland alone. By comparison,
+the committees spent \$49.5 million on out-of-state purchases. Another
+\$2.1 million worth of expenses were not associated with an address.
+
+(I used na.rm after googling how to remove NAs from my summarise
+calculations)
 
 ------------------------------------------------------------------------
 
 ### **Q5** Choose your own adventure: using either the UMD courses or campaign expenses data, ask and answer a question that is different than the previous ones. You can use one of the ones you provided in the pre_lab.
 
-```{r}
+### ***How many classes focus on social justice issues? Which departments are they in? Which department offers the greatest number of courses on social justice? What level are they taught at?***
 
+```{r}
+social_justice_courses <- umd_courses |>
+  filter(
+    str_detect(title, "Social Justice")
+  )
+
+nrow(social_justice_courses)
 ```
 
-**A5**
+```{r}
+social_justice_courses <- social_justice_courses |>
+  mutate(
+    course_code_chr = gsub("[0-9]", "", id),
+    course_code_num = gsub("[^0-9]", "", id)
+  ) |>
+  mutate(
+    course_code_cat = case_when(
+      course_code_num < 500 ~ "undergraduate",
+      course_code_num >= 500 & course_code_num < 900 ~ "graduate"
+  )
+  )
+```
+
+```{r}
+social_justice_courses |>
+  group_by(department) |>
+  summarise(
+    count_sj_courses = n()
+  ) |>
+  arrange(desc(count_sj_courses))
+
+social_justice_courses |>
+  group_by(course_code_cat) |>
+  summarise(
+    count_sj_courses = n()
+  )
+```
+
+**A5:**
+
+a)  32 courses focus on social justice
+
+b)  8 departments offer courses on social justice
+
+c)  Geographical Sciences and Education Counseling and Personnel
+    Services both offer the greatest number of social justice courses
+    (7)
+
+d)  20 classes are taught at the undergraduate level, 12 at the graduate
+    level

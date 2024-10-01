@@ -64,7 +64,7 @@ pg_schools <- payments |>
 
 Q2: Using that `pg_schools` dataframe, write code to calculate the total amount of payments to the Prince George's County School system for each fiscal year. Which fiscal year had the largest total amount? What do you notice about the years listed, and what questions do you have about that data?
 
-**A2: Prince George's County schools received the most money in 2021 (\$1,470,133,533).**
+**A2: Prince George's County schools received the most money in 2021 (\$1,470,133,533). Right off the bat, the biggest thing I'm noticing is that PG County schools didn't appear to receive *any* payments in 2011, 2012, 2016, 2022, 2023 or 2024. This is made even *weirder* by the fact that PG County schools received the most money ever in 2021. So, they're taking in more money than ever before, and then the money just ... stops? What happened in 2021? Was there turnover in the district's administration? Was the district making grant requests during this time? Was COVID a factor?**
 
 ```{r}
 pg_schools |>
@@ -80,6 +80,20 @@ Q3. You're interested in examining the vendors paid for capital projects at the 
 
 **A3:**
 
+-   Similar vendor names:
+
+    -   A & I INC, A&I INC, A&I INC., A&I  INC
+
+    -   FROEHLING AND ROBERTSON INC, FROEHLING & ROBERTSON INC
+
+    -   GLOBAL EQUIPMENT CO, GLOBAL EQUIPMENT COMPANY, GLOBAL EQUIPMENT COMPANY INC
+
+-   To clean the data — ***which I did for real in the third chunk below this*** — you would use `gsub` to replace an old string with a new one:
+
+    `mutate(new_column_name = gsub("string that needs to be changed", "new string", column))`
+
+-   For example, in the case of "GLOBAL EQUIPMENT CO" vs. "GLOBAL EQUIPMENT COMPANY" vs. "GLOBAL EQUIPMENT COMPANY INC," using `gsub("COMPANY", "CO", vendor_name))` and `gsub("INC", "", vendor_name))` to change "COMPANY" to "CO" and delete "INC," **thus making them all say "GLOBAL EQUIPMENT CO"**
+
 ```{r}
 capital_projects_umd <- payments |>
   filter(
@@ -90,6 +104,30 @@ capital_projects_umd <- payments |>
 ```{r}
 capital_projects_umd |>
   group_by(vendor_name) |>
+  summarise(
+    count_payments = n()
+  )
+```
+
+```{r}
+capital_projects_umd <- capital_projects_umd |>
+  mutate(
+    cleaned_vendor_name = gsub(" ", "", vendor_name),
+    cleaned_vendor_name = gsub(",", "", cleaned_vendor_name),
+    cleaned_vendor_name = gsub("COMPANY", "CO", cleaned_vendor_name),
+    cleaned_vendor_name = gsub("CORPORATION", "", cleaned_vendor_name),
+    cleaned_vendor_name = gsub("INCORPORATED", "", cleaned_vendor_name),
+    cleaned_vendor_name = gsub("CORP.", "", cleaned_vendor_name),
+    cleaned_vendor_name = gsub("CORP", "", cleaned_vendor_name),
+    cleaned_vendor_name = gsub("INC.", "", cleaned_vendor_name),
+    cleaned_vendor_name = gsub("INC", "", cleaned_vendor_name),
+    cleaned_vendor_name = gsub("AND", "&", cleaned_vendor_name),
+    cleaned_vendor_name = gsub("ASSOCIATES", "ASSOC", cleaned_vendor_name),
+    cleaned_vendor_name = gsub("ASSOC.", "ASSOC", cleaned_vendor_name)
+  )
+
+capital_projects_umd |>
+  group_by(cleaned_vendor_name) |>
   summarise(
     count_payments = n()
   )

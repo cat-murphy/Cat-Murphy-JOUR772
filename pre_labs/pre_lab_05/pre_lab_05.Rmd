@@ -116,7 +116,7 @@ The good news is that we have data we don't have to retype. The bad news is, we 
 
 **Task** Load the data without headers by running the codeblock below. What problems remain?
 
-**Answer: Headers are numbered instead of named, and the periods after the county name will make everything harder.**
+**Answer: Headers are numbered instead of named, and there are a bunch of periods after the county names.**
 
 ```{r}
 fentanyl_deaths <- read_csv("tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) |> clean_names()

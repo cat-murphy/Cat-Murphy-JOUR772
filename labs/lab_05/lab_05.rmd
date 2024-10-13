@@ -59,7 +59,11 @@ od_911_calls
 
 Q1. Write code to generate the number of calls that occurred on each date. Which date in 2022 had the most overdose calls, and how many? Look at the total number of rows in your result and explore the range of dates - based on your result, do you believe there are any days with no overdose calls at all? Explain why or why not.
 
-A1.
+**A1:**
+
+**a. July 7 and Oct. 4 were tied for the most overdose calls at 23.**
+
+**b. There were no days without overdose calls. I know this because the data includes calls from Feb. 6, 2022, to Feb. 6, 2023. The data set includes both Feb. 6 dates, and 2022 was not a leap year, meaning the range covers a total of 366 days. When grouped by date, there are a total of 366 rows — meaning there is at least one overdose call associated with each day in the data set.**
 
 ```{r}
 od_911_calls |>
@@ -70,7 +74,7 @@ od_911_calls |>
 
 Q2. You want to understand if there's a pattern in the day of the week that overdose calls are made. Add a column to your dataframe that displays what day of the week each date represents. You should search for how to do that using lubridate. Then write code to calculate the number of calls for each day of the week, and add a column to that result that calculates the percentage of all calls that occurred on each day of the week (so you want a dataframe with the day of the week, total number of calls and the percentage of calls on that day out of the total number of all calls). Describe your findings to me.
 
-A2.
+**A2: The data show that overdose calls were far more common on the weekend than during the week. Case in point, Saturday, Sunday and Friday calls accounted for over 45% of the total calls.**
 
 ```{r}
 od_911_calls <- od_911_calls |>
@@ -84,13 +88,16 @@ od_911_calls |>
   group_by(weekday) |>
   summarise(
     count=n(),
-    pct_total=(count / nrow(od_911_calls) *100)) |>
+    total_calls=nrow(od_911_calls),
+    pct_total=(count / total_calls *100)) |>
   arrange(desc(count))
 ```
 
 Q3. Now let's look at locations. Which ones have the most calls? How would you describe them (feel free to search for more information on them)? Is there anything about the structure of the original data that might make you less confident in the counts by location or date?
 
-A3.
+**A3: Many of the addresses associated with high numbers of overdose calls seem to be located at or near bus or metro stops, motels, places of worship or police precincts. Case in point, 5018 Painters Mill Road and 1701 Twin Springs Road are both transportation stops (and the latter is also a medical center, go figure). Addresses like 4540 Silver Springs Road, 7 Danben Court and 330 Leeanne Road are located almost directly next to a mosque or church. Two police precincts are listed in the top three. Both the Star Motel and Tim's Motel are associated with seven or more calls.**
+
+**But the current structure of the data — uncleaned, that is — makes me far less confident in the counts by location and by date. By that, I mean that there are several glaringly obvious problems with the data. First, there are a number of duplicates that need to be cleaned. The address 909 Maiden Choice Lane, for instance, is associated with eight overdose calls ... except, when you review those calls, three are duplicated. Another issue I'm seeing is that certain locations are listed under multiple addresses. For example, the address of the Owings Mills Metro Station is listed three separate ways: "5018 PAINTERS MILL RD," "OWINGS MILLS METRO; 5018 PAINTERS MILL RD" and "PARKRIDE OWINGS MILL; 5018 PAINTERS MILL RD." These are all referring to the same address, but group and count won't pick that up. The TL;DR is that this data needs to be deduped and cleaned before we analyze it any further.**
 
 ```{r}
 od_911_calls |>
@@ -100,6 +107,30 @@ od_911_calls |>
 
 ```
 
+```{r}
+od_911_calls |>
+  filter(location == "909 MAIDEN CHOICE LA")
+```
+
 Q4. What's the best story idea or question you've seen as a result of the work you've done in this lab?
 
-A4.
+**A4: Alright, at some point during the lab, I noticed a school in the location column. And while screwing around with the data — see below — I found that there were at least *37* overdose calls made from elementary, middle and high schools. When you look at when these 37 calls were made, it's clear that many of them were made *during* the school day. And the number of calls made from schools appears to dip during the summer, when school isn't in session. I would be so curious to continue looking into these calls. Is it students, teachers, trespassers — *who* is overdosing at schools during the school day? Are there any geographic patterns in the data? Has this always been an issue, or has it gotten worse in recent years? How do the schools respond when this happens?**
+
+```{r}
+{r}
+od_911_calls |>
+  filter(
+    str_detect(location, " HS") |
+    str_detect(location, " MS") | 
+    str_detect(location, "ESSEX ES") |
+    str_detect(location, "OWINGS MILLS ES") |
+    str_detect(location, "PRETTYBOY ES") |
+    str_detect(location, "SANDALWOOD ES") |
+    str_detect(location, "SUSSEX ES") |
+    str_detect(location, "WARREN ES") |
+    str_detect(location, "HALSTEAD ACADEMY") |
+    str_detect(location, "WESTERN SCHOOL")
+  )
+```
+
+A = Accidental / I = Intentional / 23D1 = Unconscious / 23D2 = Severe respiratory distress / 23C1 = Violent / 23C2 = Not alert / 23C3 = Abnormal breathing / 23C4 = Antidepressants / 23C5 = Cocaine / 23C6 = Narcotics / 23C7 = Acid or alkali / 23C8 = Unknown status (3rd party caller) / 23C9 = Poison Control request for response / 23B1 = Overdose w/o symptoms / 23O1 = Poisoning w/o priority symptoms

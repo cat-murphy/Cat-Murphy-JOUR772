@@ -152,6 +152,6 @@ maryland_zcta
 assessment_data <- read_csv('data/assessment.csv')
 
 maryland_zcta_with_assessment <- maryland_zcta |> 
-  left_join(assessment_data, join_by(ZCTA5N == zipcode))
+  left_join(assessment_data, join_by("ZCTA5N == zipcode"))
 
 ```

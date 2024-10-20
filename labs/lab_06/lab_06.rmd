@@ -71,7 +71,7 @@ baltimore_911_with_zcta <- baltimore_911 |>
 
 ### Q1. Let's start with our data from Allegany, Cecil and Carroll counties. Write code to generate a dataframe that shows the total number of calls for each county. What's the order of counties from most calls to least?
 
-A1.
+A1: Carroll, Cecil, Allegany
 
 ```{r}
 allegany_carroll_cecil_911 |>
@@ -84,7 +84,11 @@ allegany_carroll_cecil_911 |>
 
 Then calculate the most calls per county and location. Which location had the most calls - where and what is that location?
 
-A2.
+A2:
+
+-   Part I: The results generally show an increase in calls during the warmer months. From May to August, with only a couple exceptions, each county recorded at least 40 overdose calls to 911. This is in stark contrast to the cooler months, when some counties were recording as few as 17 calls and the average was closer to 30-35 calls per month.
+
+-   Part II: The address associated with the most 911 overdose calls is in Cecil County, at 314 Grove Neck Road in Earleville. That location is a drug and alcohol addiction treatment center.
 
 ```{r}
 allegany_carroll_cecil_911 <- allegany_carroll_cecil_911 |>
@@ -111,14 +115,84 @@ Add a column to your code that calculates the number of calls per 1,000 people f
 
 Which zip code has the highest rate of calls per 1,000 people? Find the neighborhoods in that zip code that are listed in the data - you can use group_by or distinct to do this. What are some of those neighborhoods?
 
-A3.
+A3:
+
+-   Part I: The zip codes where at least 75% of the population is under 18 are 21217, 21223, 21201, 21202, 21205, 21213 and 21216.
+-   Part II: Of these zip codes, 21217 has the highest per capita overdose call rate at 20.9 calls per 1,000 people.
+-   Part III: 21217 includes neighborhoods such as Penn North, Harlem Park, Druid Heights, Bolton Hill and Reservoir Hill.
 
 ```{r}
+zips_with_75_pct_under_18 <- baltimore_911_with_zcta |>
+  filter(pct_under_18 >= 75) |>
+  group_by(zip_code, population) |>
+  summarise(
+    calls = n()
+  )
+
+zips_with_75_pct_under_18 <- zips_with_75_pct_under_18 |>
+  mutate(
+    calls_per_1000_people = (calls/population * 1000)
+  ) |>
+  arrange(desc(calls_per_1000_people))
+
+zips_with_75_pct_under_18
+```
+
+```{r}
+baltimore_911_with_zcta |>
+  filter(zip_code==21217) |>
+  distinct(neighborhood)
 ```
 
 ### Q4. Choose your own adventure: I want you to come up with a question you could ask of the Baltimore City data that combines both the calls and the demographic information. You must use both demographics and the overdose call data in your work.
 
 A4:
 
+I wrote two for this:
+
+-   Compare the per capita call rate to the percentage of white residents. Is there any relationship?
+    -   Generally speaking — though there were exceptions — per capita overdose call rates were lower in whiter communities and higher in predominantly non-white communities.
+-   Calculate the calls per month in the zip codes where at least 75% of the population is under 18. Do you notice a trend in when the calls are most frequent?
+    -   Overdose calls in these zip codes spiked in August and July, with higher than average numbers in June and September. This not only follows the trend of there being more calls placed during the warmer months, but also corresponds with when school is out.
+
 ```{r}
+baltimore_911_by_race <- baltimore_911_with_zcta |>
+  group_by(zip_code, population, pct_white_non_hispanic) |>
+  summarise(
+    calls=n()
+  )
+
+baltimore_911_by_race <- baltimore_911_by_race |>
+  mutate(
+    calls_per_1000_people = (calls/population * 1000)
+  ) |>
+  arrange(desc(calls_per_1000_people))
+
+baltimore_911_by_race |>
+  select(population, zip_code, pct_white_non_hispanic, calls_per_1000_people)
+```
+
+```{r}
+plot(baltimore_911_by_race$pct_white_non_hispanic, baltimore_911_by_race$calls_per_1000_people,
+     main = "impact of racial demographics on overdose calls per capita",
+     xlab = "pct white per zip code",
+     ylab = "calls per 1000 people")
+```
+
+```{r}
+baltimore_911_with_zcta_with_month <- baltimore_911_with_zcta |>
+  mutate(
+    month=month(date)
+  )
+
+calls_by_month_zips_majority_under_18 <- baltimore_911_with_zcta_with_month |>
+  filter(pct_under_18 >= 75) |>
+  group_by(month) |>
+  summarise(
+    calls = n()
+  ) |>
+  arrange(desc(calls))
+
+
+calls_by_month_zips_majority_under_18
 ```

@@ -78,9 +78,8 @@ In this notebook, we are reverse engineering five sentences from the story.
 -   **Sentence text**: “A deep search in the Federal Election Commission database of campaign finances for principal owners, controlling owners, co-owners and commissioners from the NBA, NFL, NHL, WNBA, MLB and NASCAR reveals that this deep-pocketed group has sent \$34.2 million (72.9 percent) to Republican campaigns or super PACs purely supporting Republican causes, compared to \$10.1 million (21.5 percent) to Democrats over the past three elections.”
 -   **Analysis summary**: We were able to confirm the finding ... eventually. Cleaning the data to anaylze this sentence proved to be incredibly challenging due to the presence of special characters in the "amount" column data, and R's corresponding categorization of the data as character data. But once we worked through those issues, it was mostly OK. We did run into some issues creating new columns for the amount totals and percentages, but creating a new data frame with only the data from the amount column seemed to solve these issues. And, finally, we were able to use this data set to confirm that, over three election cycles, pro sports owners contributed \$34.2 million (72.9 percent) to Republicans and \$10.1 million (21.5 percent) to Democrats.
 
-```{=html}
 <!-- -->
-```
+
 -   [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
 
 ```{r}

@@ -86,7 +86,7 @@ Then calculate the most calls per county and location. Which location had the mo
 
 A2:
 
--   Part I: The results generally show an increase in calls during the warmer months. From May to August, with only a couple exceptions, each county recorded at least 40 overdose calls to 911. This is in stark contrast to the cooler months, when some counties were recording as few as 17 calls and the average was closer to 30-35 calls per month.
+-   Part I: The results generally show an increase in calls during the warmer months. From May to August, with only a couple exceptions, more than 40 overdose calls to 911 were placed in each county. This is in stark contrast to the cooler months, when some counties were recording as few as 17-25 calls in a month, and when the average was closer to 30-35 calls per month.
 
 -   Part II: The address associated with the most 911 overdose calls is in Cecil County, at 314 Grove Neck Road in Earleville. That location is a drug and alcohol addiction treatment center.
 

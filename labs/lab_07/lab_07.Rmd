@@ -121,16 +121,16 @@ md_population <- md_population |>
   )
 
 montgomery_od_911_with_zcta <- montgomery_od_zip_overview |>
-  full_join(md_population, join_by(zip==zcta))
+  left_join(md_population, join_by(zip==zcta))
 
 montgomery_od_911_with_zcta <- montgomery_od_911_with_zcta |>
   mutate(calls_per_capita = calls/population_18_over * 1000)
 
 montgomery_od_911_with_zcta |>
-  arrange(desc(calls))
+  arrange(desc(calls_per_capita))
 ```
 
-**Answer here: ZIP code 20877 (the Gaithersburg area) has the highest per capita rate of 911 overdose calls (1.7 per 1,000 people), but ZIP code 20874 (the Germantown area) had the highest number of calls overall (62).**
+**Answer here: ZIP code 20877 — the Gaithersburg area — has the highest per capita rate of 911 overdose calls at 1.7 calls per 1,000 people. ZIP 20707 — the Laurel area, where there was only one recorded 911 overdose call — had the lowest per capita call rate at 0.04 calls per 1,000 people.**
 
 ------------------------------------------------------------------------
 
@@ -138,12 +138,42 @@ montgomery_od_911_with_zcta |>
 
 **Answer here:**
 
+20877:
+
+-   38,524 people (20% white, 18% Black, 16% Asian, 3% two or more races, **44% Hispanic**)
+
+-   \$35,947 per capita income
+
+-   13.2% poverty rate
+
+-   **46.2% foreign-born**
+
+20707:
+
+-   36,352 people (20% white, 46% Black, 11% Asian, 6% two or more races, **16% Hispanic**)
+
+-   \$49,071 per capita income
+
+-   8.9% poverty rate
+
+-   **28.3% foreign-born**
+
+My answer is that there is *probably* a story here, but it would require more data. The possible story would likely center around the noticeable racial and citizenship disparities between the two zip codes. Roughly 44% of the residents in the Gaithersburg area are Hispanic — more than double the state average — compared to 16% in the Laurel area. Likewise, more than 46% of residents in the Gaitherburg area are immigrants, compared to 28% in the Laurel area. The reason I say that there is *probably* a story here is because there is no available language data. I know from my own NARCAN training that providing overdose prevention information and resources to Spanish-speaking communities can be difficult, and this tends to result in higher rates of overdoses in these communities. Given the noticeable racial and citizenship disparities between the zip codes, I would be curious to learn more about the potential language barriers this may present. I would also want to see fatal overdose demographic data from each of these two areas. All that being said, I'm relatively confident there is a story here.
+
 ------------------------------------------------------------------------
 
 #### **Q5** Go back to your joined dataframe from Q3 and add two more columns representing the minimum and maximum populations based on the estimate and margin of error, then calculate per capita rates for each. Do you get the same two zip codes for the highest and lowest as you did before? Does that give you more or less confidence in your answers to Q3?
 
 ```{r}
+montgomery_od_911_with_zcta <- montgomery_od_911_with_zcta |>
+  mutate(
+    min_pop_18_over = population_18_over-moe,
+    max_pop_18_over = population_18_over+moe,
+    min_pop_calls_per_capita = calls/min_pop_18_over * 1000,
+    max_pop_calls_per_capita = calls/max_pop_18_over * 1000,
+    )
 
+montgomery_od_911_with_zcta
 ```
 
-**Answer here:**
+**Answer here: Having this context makes me more confident in my answers to Q3 because the margins of error don't even come close to overlapping for either ZIP. That is, ZIP 20707's highest possible per capita call rate is still significantly lower than the next-lowest ZIP code's lowest possible rate; the same is true for ZIP 20877, where the lowest possible per capital call rates is signifcantly higher than the next-highest ZIP code's highest possible rate.**

@@ -67,7 +67,7 @@ md_median_age |>
 
 ```
 
-**Answer here: Baltimore City (35.7 years)**
+**Answer here: Baltimore City has the lowest *estimated* median age at 35.7 years. (Unless you're asking a trick question, in which case I'll add that Wicomico County *COULD* have the lowest median age, because the margin of error would put the median age between 35.5 and 36.5. In other words, given the overlapping margins of error, there is a possibility that Wicomico County has a lower median age than Baltimore City.**
 
 ------------------------------------------------------------------------
 
@@ -130,7 +130,7 @@ montgomery_od_911_with_zcta |>
   arrange(desc(calls_per_capita))
 ```
 
-**Answer here: ZIP code 20877 — the Gaithersburg area — has the highest per capita rate of 911 overdose calls at 1.7 calls per 1,000 people. ZIP 20707 — the Laurel area, where there was only one recorded 911 overdose call — had the lowest per capita call rate at 0.04 calls per 1,000 people.**
+**Answer here: ZIP code 20877 — the Gaithersburg area — had the highest per capita rate of 911 overdose calls at 1.7 calls per 1,000 people. ZIP 20707 — the Laurel area, where there was only one recorded 911 overdose call — had the lowest per capita call rate at 0.04 calls per 1,000 people.**
 
 ------------------------------------------------------------------------
 

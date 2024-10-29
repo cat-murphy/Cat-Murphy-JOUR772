@@ -229,8 +229,8 @@ maryland_top_counties |>
   theme_economist() +
   labs(
     title="Counties with Biggest Jumps in Unaffiliated Voters",
-    x = "net change",
-    y = "county",
+    x = "county",
+    y = "net change",
     caption = "source: Maryland State Board of Elections"
   )
 ```
@@ -276,7 +276,7 @@ We'll put the date on the x axis and total contributions on the y axis.
 
 **Task** Run the following code. Explain what you see after running the code in the space below.
 
-**Answer: A line graph charting the fluctuations in the contribution data. Shows that the contribution amounts generally fluctuate between \~\$400 and \~\$800 until June, when contributions spiked to over \$1,100.**
+**Answer: A line graph charting the fluctuations in the contribution data. Shows that the number of contributions generally fluctuate between \~400 and \~800 a day until June, when contributions spiked to over 1,100.**
 
 ```{r}
 md_winred_by_date |>

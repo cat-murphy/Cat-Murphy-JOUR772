@@ -203,7 +203,7 @@ And now we'll apply the economist theme from that package with theme_economist()
 
 **Task** Run the following code. Explain what you see after running the code in the space below. What has changed from the last version of the chart?
 
-**Answer: Now, because we've installed the `ggthemes` package, we can use its themes to style our charts. Here, we used `theme_economist()` to put our chart on a light blue background.**
+**Answer: Now, because we've installed the `ggthemes` package, we can use its themes to style our charts. Here, we used `theme_economist()` to apply The Economist's theme to our chart, removing the plain gray background and putting it on a light blue background instead.**
 
 ```{r}
 maryland_top_counties |>

@@ -90,6 +90,9 @@ top_10_counties |>
 **A2.**
 
 ```{r}
+md_ballots <- md_ballots |>
+  
+
 bottom_10_counties <- md_ballots |>
   arrange(pct_returned) |>
   select(county_name, pct_returned) |>

@@ -73,7 +73,7 @@ In this notebook, we are reverse engineering five sentences from the story.
 ### Sentence 1
 
 -   **Sentence text**: “A deep search in the Federal Election Commission database of campaign finances for principal owners, controlling owners, co-owners and commissioners from the NBA, NFL, NHL, WNBA, MLB and NASCAR reveals that this deep-pocketed group has sent \$34.2 million (72.9 percent) to Republican campaigns or super PACs purely supporting Republican causes, compared to \$10.1 million (21.5 percent) to Democrats over the past three elections.”
--   **Analysis summary**: We were able to confirm the finding ... eventually. Cleaning the data to anaylze this sentence proved to be incredibly challenging due to the presence of special characters in the "amount" column data, and R's corresponding categorization of the data as character data. But once we worked through those issues, it was mostly OK. We did run into some issues creating new columns for the amount totals and percentages, but creating a new data frame with only the data from the amount column seemed to solve these issues. And, finally, we were able to use this data set to confirm that, over three election cycles, pro sports owners contributed \$34.2 million (72.9 percent) to Republicans and \$10.1 million (21.5 percent) to Democrats.
+    -   **Analysis summary**: We were able to confirm the finding ... eventually. Cleaning the data to analyze this sentence proved to be incredibly challenging due to the presence of special characters in the "amount" column data, and R's corresponding categorization of the data as character data. But once we worked through those issues, it was mostly OK. We did run into some issues creating new columns for the amount totals and percentages, but creating a new data frame with only the data from the amount column seemed to solve these issues. And, finally, we were able to use this data set to confirm that, over three election cycles, pro sports owners contributed \$34.2 million (72.9 percent) to Republicans and \$10.1 million (21.5 percent) to Democrats.
 
 ```{r}
 # Put code to reverse engineer sentence here
@@ -101,7 +101,7 @@ sports_political_donations_amounts <- sports_political_donations_amounts |>
 ### Sentence 2
 
 -   **Sentence text**: “Forty owners account for more than \$40 million – more than 85 percent of all contributions. And looking at these big spenders, it’s clear where their allegiance lie: 77.7 percent of that \$40 million went to Republican causes or candidates, with 18.8 going to Democrats.”
-    -   **Analysis summary**: The first half of this was much easier to tackle than the second half, but with Daniel's help, we managed to get there. For the first part, we were able to replciate the "more than 85%" finding by using group_by, summarise and top_n to find the top 40 owners, then dividing the sum of their donations by the sum of all donations in the data set. The second part required a lot more effort because we had to analyze the top 40 owners' donations by party, and separating their donations with affiliations proved more difficult than we imagined. In the end, though, we were able to replicate the finding by creating two data frames: one of just the top 40 owners, the second of all donors by party donations. We then left_joined the list of all donors with our list of the top 40 to get the party donation information for just those donors. From there, we were able to find that 88.9% of these donations went to Republicans by filtering by Republican donations and dividing the sum of those donations by the sum of all donations made by the top 40 owners.
+    -   **Analysis summary**: The first half of this was much easier to tackle than the second half, but with Daniel's help, we managed to get there. For the first part, we were able to replicate the "more than 85%" finding by using `group_by()`, `summarise()` and `top_n()` to find the top 40 owners, then dividing the sum of their donations by the sum of all donations in the data set. The second part required a lot more effort because we had to analyze the top 40 owners' donations by party, and separating their donations with affiliations proved more difficult than we imagined. In the end, though, we were able to replicate the finding by creating two data frames: one of just the top 40 owners, the second of all donors by party donations. We then used `left_join()` to join the list of all donors with our list of the top 40 to get the party donation information for just those donors. From there, we were able to find that 88.9% of these donations went to Republicans by filtering by Republican donations and dividing the sum of those donations by the sum of all donations made by the top 40 owners.
 
 ```{r}
 # Put code to reverse engineer sentence here
@@ -135,13 +135,13 @@ top_40_with_party |>
 
 # result
 
-75.80681
+# 75.80681
 ```
 
 ### Sentence 3
 
 -   **Sentence text**: “More than 63 percent of the \$47 million in the database of nearly 3,000 contributions comes from just 108 donations split among these 40 owners — and 79 percent of that money went to Republican causes.”
--   **Analysis summary**: Because we already had the list of the top 40 donors, this sentence was much easier to reverse engineer. To replicate the finding, we created a new data frame that left_joined the overall list of donations with the list of the top 40 owners. We then arranged the resulting 1,882 observations in descending order before using the head() function to separate only the top 108. We were able to find the 63% figure by dividing the sum of the top 40 owners' 108 donations by the sum of *all* political donations. Replicating the second finding — that 79% of these 108 donations went to Republican causes — just required grouping and summarizing those 108 donations by party, filtering by Republican donations and dividing the sum of the Republican donations by the sum of the top owners' top donations.
+    -   **Analysis summary**: Because we already had the list of the top 40 donors, this sentence was much easier to reverse engineer. To replicate the finding, we created a new data frame that left_joined the overall list of donations with the list of the top 40 owners. We then arranged the resulting 1,882 observations in descending order before using the `head()` function to separate only the top 108. We were able to find the 63% figure by dividing the sum of the top 40 owners' 108 donations by the sum of *all* political donations. Replicating the second finding — that 79% of these 108 donations went to Republican causes — just required grouping and summarizing those 108 donations by party, filtering by Republican donations and dividing the sum of the Republican donations by the sum of the top owners' top donations.
 
 ```{r}
 # Put code to reverse engineer sentence here
@@ -157,8 +157,7 @@ sum(top_donations_from_top_40_owners$amount)/sum(sports_political_donations$amou
 
 # result 
 
-63.20321
-
+# 63.20321
 ```
 
 ```{r}
@@ -169,34 +168,88 @@ top_donations_from_top_40_owners_by_party <- top_donations_from_top_40_owners |>
 
 top_donations_from_top_40_owners_by_party$party_amount/sum(top_donations_from_top_40_owners$amount)*100
 
-#result
+# result
 
-78.93248
+# 78.90937
 ```
 
 ### Sentence 4
 
 -   **Sentence text**: "Overall, 51.7 percent of all contributions by WNBA owners went to Democrats, with 42.3 percent going to Republicans. And of the \$1.3 million contributed by WNBA owners to Republicans, 65.5 percent comes from Kelly Loeffler, the Republican from Georgia who is co-owner of the Atlanta Dream.”
--   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
+    -   **Analysis summary**: We were able to confirm the finding, but we did have to rework our analysis after realizing that Glen Taylor is the owner of both the Minnesota Timberwolves and the Minnesota Lynx — meaning both the NBA and WNBA are listed under "league" for him. This meant that when we filtered by WNBA, his donations weren't included, which altered our results. This was obvious because our results said donations favored Republicans, which we knew wasn't true based on FiveThirtyEight's reporting. However, once we used str_detect to include Taylor's donations in our calculations, we were able to replicate the finding by calculating the sum of the donations by party. We then used `head()` and `select()` to show only the percentages of donations contributed by Democrats and Republicans.
 
 ```{r}
 # Put code to reverse engineer sentence here
 
+wnba_contributions <- sports_political_donations |>
+  filter(
+    str_detect(league, "WNBA")
+  )
 
+wnba_contributions_by_party <- wnba_contributions |>
+  group_by(party) |>
+  summarise(total_amount=sum(amount)) |>
+  arrange(desc(total_amount)) |>
+  mutate(
+    pct_total = total_amount/sum(total_amount)*100
+  )
 
-# Display results of code below this codeblock
+wnba_contributions_by_party |>
+  select(party, pct_total) |>
+  head(2)
 
+# results
+
+# 51.7% Democrat
+# 42.3% Republican
+
+```
+
+```{r}
+wnba_republican_contributions <- wnba_contributions |>
+  filter(party=="REPUBLICAN")
+
+sum(wnba_republican_contributions$amount)
+
+# result
+
+# $1,338,459
+
+wnba_republican_contributions_by_owner <- wnba_republican_contributions |>
+  group_by(owner) |>
+  summarise(total_amount = sum(amount))
+
+wnba_republican_contributions_by_owner |>
+  mutate(
+    pct_total=total_amount/sum(total_amount)*100
+  ) |>
+  filter(owner == "KELLY LOEFFLER") |>
+  select(owner, pct_total)
+
+# result
+
+# 65.5%
 ```
 
 ### Sentence 5
 
--   **Sentence text**: [Paste in sentence to engineer here]
--   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
+-   **Sentence text**: “Giants owner Charles Johnson’s total contributions make up 32.1% of the Republican contributions.”
+-   **Analysis summary**: We were also able to confirm this finding. At first, we tried filtering all donations to find Charles Johnson's donations, but because he made a small number of non-Republican donations, we had to first go back and create a separate data frame of Republican donations and then filter those by his name. However, once we did that, dividing the sum of his donations by the sum of all Republican donations allowed us to replicate the 32.1% finding mentioned in the article.
 
 ```{r}
 # Put code to reverse engineer sentence here
 
-# Display results of code below this codeblock
+republican_donations <- sports_political_donations |>
+  filter(party=="REPUBLICAN")
+
+charles_johnson_donations <- republican_donations |>
+  filter(owner=="CHARLES JOHNSON")
+
+sum(charles_johnson_donations$amount)/sum(republican_donations$amount)*100
+
+# result
+
+# 32.1%
 
 ```
 

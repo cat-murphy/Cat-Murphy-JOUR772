@@ -55,7 +55,7 @@ md_ballot_dates <- read_csv("data/md_absentee_ballots_date.csv") |>
 -   Good labels for the x & y axis and a caption for the source, which is the Maryland State Board of Elections
 -   Readable bars - the values shouldn't be overlapping
 
-**A1.**
+**A1. Worcester County had the highest percentage of absentee ballots returned overall (62.6%).**
 
 ```{r}
 md_ballots <- md_ballots |>
@@ -85,34 +85,40 @@ top_10_counties |>
 -   Make a codeblock below to write your code in.
 -   Calculate the percentage of ballots returned by both Democrats and Republicans.
 -   Arrange the dataframe to show the counties with the smallest percentage of returned ballots from Democrats first.
--   Use ggplot to make a horizontal bar chart that shows just the first 10 counties, with the length of the bar determined by the county's percentage of ballots returned by Democrats. Give it an appropriate title, source, and x and y axis titles.
+-   Use ggplot to make a horizontal bar chart that shows just the first 10 counties, with the length of the bar determined by the county's difference of percentages between parties. Give it an appropriate title, source, and x and y axis titles.
 
 **A2.**
 
 ```{r}
 md_ballots <- md_ballots |>
-  
+  mutate(
+    dem_pct_returned = dem_received/dem_sent*100,
+    rep_pct_returned = rep_received/rep_sent*100
+  )
 
-bottom_10_counties <- md_ballots |>
-  arrange(pct_returned) |>
-  select(county_name, pct_returned) |>
+dem_bottom_10_counties <- md_ballots |>
+  arrange(dem_pct_returned) |>
+  select(county_name, dem_pct_returned, rep_pct_returned) |>
+  mutate(
+    pct_returned_diff = dem_pct_returned-rep_pct_returned
+  ) |>
   head(10)
 
-bottom_10_counties |>
+dem_bottom_10_counties |>
   ggplot() +
-  geom_bar(aes(x=reorder(county_name, pct_returned), weight=pct_returned)) +
+  geom_bar(aes(x=reorder(county_name, pct_returned_diff), weight=pct_returned_diff)) +
   coord_flip() +
   labs(
-    title="Counties with Lowest Percentages of Returned Ballots",
-    x = "percentage of ballots returned",
-    y = "county",
+    title="How Democrats' Ballot Return Rates Compare to Republicans",
+    x = "counties with lowest Democrat return rates",
+    y = "percent difference in Democrat return rates compared to Republicans",
     caption = "source: Maryland State Board of Elections"
   )
 ```
 
 **Q3** Let's make a line chart using the second set of absentee ballot data - this one tracking returns by date. We want to see received ballots for Frederick County for Democrats, Republicans and Others, so you'll make a chart with three lines, adding color to each one (you can choose, but choose sensibly). Give the chart a title and good labels. What's the story that this line chart tells? Compare and contrast the three lines. Does it match what you know about absentee voting habits?
 
-**A3**
+**A3. This chart shows that absentee ballot returns in Frederick County leaned heavily Democratic. Case in point, Democrats returned a minimum of 6,300 ballots per day, while Republicans and Other never crack 4,500. All three lines gradually rise between Oct. 12 and Oct. 23, showing an increase in returned ballots across all parties as the month progresses. However, the number of Democratic ballots returned increases at a much sharper rate, jumping from 6,300 per day to over 10,000 per day. This is generally consistent with what I know about voting habits, as Democrats generally vote by mail at a higher rate than anyone else. This discrepancy has been especially true in the wake of Republican claims that mail-in voting is "rigged." Likewise, it makes sense that Democrats are returning far more ballots in Frederick County — a county that already leans left politically.**
 
 ```{r}
 frederick_received <- md_ballot_dates |>
@@ -156,9 +162,43 @@ Follow these steps:
 4.  Add a line of fit to the plot using geom_smooth (<https://ggplot2.tidyverse.org/reference/geom_smooth.html#ref-examples>). Specify the method as lm.
 5.  In the answer space below, describe what you see. In a general sense, how would you report out the main point(s) of this chart? Are there counties that seem to be over or under-performing in relation to the overall trend?
 
-**A4.**
+**A4. The graph shows that the number of ballots sent and ballots returned in each county increases relatively linearly in relation to the county's population, with the average return rate hovering around 53%. Case in point, Montgomery County, Prince George's County, Baltimore County, Anne Arundel County, Baltimore City, Howard County and Frederick County are the seven most populous counties in Maryland — they're also the seven counties with the greatest numbers of sent and returned ballots. However, even within that, it's clear that some counties are underperforming. For example, PG County is more populous than Baltimore County, but Baltimore County had more ballots sent and returned. Still, both counties overperform the trend line for percentage of ballots returned. Montgomery County, meanwhile, sent out by far the most ballots of any county, but its return rate is decidedly lower than average. The same thing happened in Baltimore City, which sent out roughly 20,000 more ballots than Howard County but received approximately the same amount; accordingly, Howard County is on-track with the trend line, while Baltimore City underperformed it by a noticeable margin. On the other hand, the smallest counties in Maryland generally performed in line with the overall trend.**
 
 ```{r}
-
-  
+md_ballots |>
+  ggplot(aes(x = total_sent, y = total_received)) +
+  geom_point() +
+  geom_smooth(method=lm) +
+  scale_x_continuous(breaks=seq(0,180000,by=20000)) +
+  scale_y_continuous(breaks=seq(0,70000,by=5000)) +
+  annotate("text", x=183000, y=70670, label= "Montgomery", size=2.25) +
+  annotate("text", x=107000, y=55388, label= "Balt. County", size=2.25) +
+  annotate("text", x=100000, y=48414, label= "PG", size=2.25) +
+  annotate("text", x=78000, y=45746, label= "Anne Arundel", size=2.25) +
+  annotate("text", x=76000, y=26510, label= "Balt. City", size=2.25) +
+  annotate("text", x=45000, y=25180, label= "Howard", size=2.25) +
+  annotate("text", x=46000, y=18228, label= "Frederick", size=2.25) +
+  annotate("text", x=35000, y=15537, label= "Harford", size=2.25) +
+  annotate("text", x=27000, y=11486, label= "Carroll", size=1.75) +
+  annotate("text", x=25000, y=9783, label= "Charles", size=1.75) +
+  annotate("text", x=11000, y=9027, label= "Wash.", size=1.6) +
+  annotate("text", x=17500, y=6899, label= "Calvert", size=1.6) +
+  annotate("text", x=7900, y=7127, label= "St. Mary's", size=1.6) +
+  annotate("text", x=3500, y=6066, label= "Wicomico", size=1.6) +
+  annotate("text", x=13500, y=4725, label= "Cecil", size=1.6) +
+  annotate("text", x=1500, y=4947, label= "Worcester", size=1.6) +
+  annotate("text", x=500, y=3581, label= "Allegany", size=1.6) +
+  annotate("text", x=10500, y=3444, label= "Talbot", size=1.7) +
+  annotate("text", x=8000, y=2337, label= "QA", size=1.6) +
+  annotate("text", x=-4100, y=2039, label= "Dorchester", size=1.6) +
+  annotate("text", x=7500, y=1209, label= "Garrett", size=1.6) +
+  annotate("text", x=-2000, y=707, label= "Kent", size=1.6) +
+  annotate("text", x=6900, y=189, label= "Caroline", size=1.6) +
+  annotate("text", x=0, y=-806, label= "Somerset", size=1.6) +
+  labs(
+    title="Number of Ballots Sent vs. Returned in Each Maryland County",
+    x = "number of ballots sent",
+    y = "number of ballots returned",
+    caption = "source: Maryland State Board of Elections"
+  ) 
 ```

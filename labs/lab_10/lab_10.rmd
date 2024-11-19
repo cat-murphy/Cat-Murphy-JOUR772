@@ -86,7 +86,7 @@ ggplot() +
 #Read data and calculate rate of outages per customer
 county_outages <- read_csv("data/county_outages_march2023.csv") |>
   clean_names() |>
-  mutate(outage_rate = outage_customers/total_customers*100)
+  mutate(outage_rate = outage_customers/total_customers*10000)
 ```
 
 ```{r}

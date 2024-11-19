@@ -1,0 +1,48 @@
+---
+title: "Data Analysis Project"
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(janitor) 
+library(tidyverse)
+library(tidycensus)
+library(tigris)
+```
+
+## Data Analysis Project
+
+```{r}
+#loading & cleaning
+election_results <- read_csv("data/election_results.csv") |>
+  clean_names()
+
+#renaming major candidate columnns & combining all write in columns
+election_results_clean <- election_results |>
+  rename(
+    harris_walz = kamala_d_harris_and_tim_walz_democratic,
+    trump_vance = donald_j_trump_and_jd_vance_republican,
+    oliver_ter_maat = chase_oliver_and_mike_ter_maat_libertarian,
+    stein_ware = jill_ellen_stein_and_rudolph_ware_green,
+    kennedy_shanahan = robert_f_kennedy_jr_and_nicole_shanahan_unaffiliated
+    ) |>
+  mutate(
+    write_ins = sharon_e_harris_write_in_democratic + ralph_jaffe_write_in_democratic + paij_boring_and_jaimey_rutschman_write_in_republican + sethatina_newman_write_in_republican + carol_asher_write_in_other_candidates + jokie_beckett_jr_write_in_other_candidates + claudia_de_la_cruz_and_karina_garcia_write_in_other_candidates + john_r_gibb_jr_write_in_other_candidates + joseph_kishore_write_in_other_candidates + william_p_stodden_write_in_other_candidates + shiva_ayyadurai_and_crystal_ellis_write_in_unaffiliated + president_r_boddie_write_in_unaffiliated + theo_brown_sr_write_in_unaffiliated + susan_maude_buchser_write_in_unaffiliated + john_cheng_and_wayne_waligorski_write_in_unaffiliated + cherunda_fox_write_in_unaffiliated + garry_hubbard_and_elizabeth_seymour_write_in_unaffiliated + shondra_irving_write_in_unaffiliated + douglas_jenkins_write_in_unaffiliated + brian_larry_kienitz_write_in_unaffiliated + richard_mayers_write_in_unaffiliated + andre_ramon_mc_neil_sr_write_in_unaffiliated + future_madam_potus_and_jessica_kennedy_write_in_unaffiliated + benjamin_l_schwalb_write_in_unaffiliated + peter_sonski_write_in_unaffiliated + lester_h_waller_jr_write_in_unaffiliated + cornel_west_and_melina_abdullah_write_in_unaffiliated, michael_yost_write_in_unaffiliated, other_write_ins
+  )
+
+#deselecting write-in candidate columns
+election_results_clean <- election_results_clean |>
+  select(-sharon_e_harris_write_in_democratic, -ralph_jaffe_write_in_democratic, -paij_boring_and_jaimey_rutschman_write_in_republican, -sethatina_newman_write_in_republican, -carol_asher_write_in_other_candidates, -jokie_beckett_jr_write_in_other_candidates, -claudia_de_la_cruz_and_karina_garcia_write_in_other_candidates, -john_r_gibb_jr_write_in_other_candidates, -joseph_kishore_write_in_other_candidates, -william_p_stodden_write_in_other_candidates, -shiva_ayyadurai_and_crystal_ellis_write_in_unaffiliated, -president_r_boddie_write_in_unaffiliated, -theo_brown_sr_write_in_unaffiliated, -susan_maude_buchser_write_in_unaffiliated, -john_cheng_and_wayne_waligorski_write_in_unaffiliated, -cherunda_fox_write_in_unaffiliated, -garry_hubbard_and_elizabeth_seymour_write_in_unaffiliated, -shondra_irving_write_in_unaffiliated, -douglas_jenkins_write_in_unaffiliated, -brian_larry_kienitz_write_in_unaffiliated, -richard_mayers_write_in_unaffiliated, -andre_ramon_mc_neil_sr_write_in_unaffiliated, -future_madam_potus_and_jessica_kennedy_write_in_unaffiliated, -benjamin_l_schwalb_write_in_unaffiliated, -peter_sonski_write_in_unaffiliated, -lester_h_waller_jr_write_in_unaffiliated, -cornel_west_and_melina_abdullah_write_in_unaffiliated, -michael_yost_write_in_unaffiliated, -other_write_ins)
+```
+
+```{r}
+
+```
+
+```{r}
+
+```

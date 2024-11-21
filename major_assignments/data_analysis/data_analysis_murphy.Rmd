@@ -16,13 +16,15 @@ library(tigris)
 
 ## Data Analysis Project
 
+### Maryland 2024 Election Data
+
 ```{r}
-#loading & cleaning
-election_results <- read_csv("data/election_results.csv") |>
+#loading & cleaning md 2024 data
+md24_raw <- read_csv("data/md_election_results_2024.csv") |>
   clean_names()
 
 #renaming major candidate columnns & combining all write in columns
-election_results_clean <- election_results |>
+md24_with_third_party_breakdown <- md24_raw |>
   rename(
     harris_walz = kamala_d_harris_and_tim_walz_democratic,
     trump_vance = donald_j_trump_and_jd_vance_republican,
@@ -31,18 +33,109 @@ election_results_clean <- election_results |>
     kennedy_shanahan = robert_f_kennedy_jr_and_nicole_shanahan_unaffiliated
     ) |>
   mutate(
-    write_ins = sharon_e_harris_write_in_democratic + ralph_jaffe_write_in_democratic + paij_boring_and_jaimey_rutschman_write_in_republican + sethatina_newman_write_in_republican + carol_asher_write_in_other_candidates + jokie_beckett_jr_write_in_other_candidates + claudia_de_la_cruz_and_karina_garcia_write_in_other_candidates + john_r_gibb_jr_write_in_other_candidates + joseph_kishore_write_in_other_candidates + william_p_stodden_write_in_other_candidates + shiva_ayyadurai_and_crystal_ellis_write_in_unaffiliated + president_r_boddie_write_in_unaffiliated + theo_brown_sr_write_in_unaffiliated + susan_maude_buchser_write_in_unaffiliated + john_cheng_and_wayne_waligorski_write_in_unaffiliated + cherunda_fox_write_in_unaffiliated + garry_hubbard_and_elizabeth_seymour_write_in_unaffiliated + shondra_irving_write_in_unaffiliated + douglas_jenkins_write_in_unaffiliated + brian_larry_kienitz_write_in_unaffiliated + richard_mayers_write_in_unaffiliated + andre_ramon_mc_neil_sr_write_in_unaffiliated + future_madam_potus_and_jessica_kennedy_write_in_unaffiliated + benjamin_l_schwalb_write_in_unaffiliated + peter_sonski_write_in_unaffiliated + lester_h_waller_jr_write_in_unaffiliated + cornel_west_and_melina_abdullah_write_in_unaffiliated, michael_yost_write_in_unaffiliated, other_write_ins
+    write_ins = (sharon_e_harris_write_in_democratic + ralph_jaffe_write_in_democratic + paij_boring_and_jaimey_rutschman_write_in_republican + sethatina_newman_write_in_republican + carol_asher_write_in_other_candidates + jokie_beckett_jr_write_in_other_candidates + claudia_de_la_cruz_and_karina_garcia_write_in_other_candidates + john_r_gibb_jr_write_in_other_candidates + joseph_kishore_write_in_other_candidates + william_p_stodden_write_in_other_candidates + shiva_ayyadurai_and_crystal_ellis_write_in_unaffiliated + president_r_boddie_write_in_unaffiliated + theo_brown_sr_write_in_unaffiliated + susan_maude_buchser_write_in_unaffiliated + john_cheng_and_wayne_waligorski_write_in_unaffiliated + cherunda_fox_write_in_unaffiliated + garry_hubbard_and_elizabeth_seymour_write_in_unaffiliated + shondra_irving_write_in_unaffiliated + douglas_jenkins_write_in_unaffiliated + brian_larry_kienitz_write_in_unaffiliated + richard_mayers_write_in_unaffiliated + andre_ramon_mc_neil_sr_write_in_unaffiliated + future_madam_potus_and_jessica_kennedy_write_in_unaffiliated + benjamin_l_schwalb_write_in_unaffiliated + peter_sonski_write_in_unaffiliated + lester_h_waller_jr_write_in_unaffiliated + cornel_west_and_melina_abdullah_write_in_unaffiliated + michael_yost_write_in_unaffiliated + other_write_ins)
   )
 
 #deselecting write-in candidate columns
-election_results_clean <- election_results_clean |>
+md24_with_third_party_breakdown <- md24_with_third_party_breakdown |>
   select(-sharon_e_harris_write_in_democratic, -ralph_jaffe_write_in_democratic, -paij_boring_and_jaimey_rutschman_write_in_republican, -sethatina_newman_write_in_republican, -carol_asher_write_in_other_candidates, -jokie_beckett_jr_write_in_other_candidates, -claudia_de_la_cruz_and_karina_garcia_write_in_other_candidates, -john_r_gibb_jr_write_in_other_candidates, -joseph_kishore_write_in_other_candidates, -william_p_stodden_write_in_other_candidates, -shiva_ayyadurai_and_crystal_ellis_write_in_unaffiliated, -president_r_boddie_write_in_unaffiliated, -theo_brown_sr_write_in_unaffiliated, -susan_maude_buchser_write_in_unaffiliated, -john_cheng_and_wayne_waligorski_write_in_unaffiliated, -cherunda_fox_write_in_unaffiliated, -garry_hubbard_and_elizabeth_seymour_write_in_unaffiliated, -shondra_irving_write_in_unaffiliated, -douglas_jenkins_write_in_unaffiliated, -brian_larry_kienitz_write_in_unaffiliated, -richard_mayers_write_in_unaffiliated, -andre_ramon_mc_neil_sr_write_in_unaffiliated, -future_madam_potus_and_jessica_kennedy_write_in_unaffiliated, -benjamin_l_schwalb_write_in_unaffiliated, -peter_sonski_write_in_unaffiliated, -lester_h_waller_jr_write_in_unaffiliated, -cornel_west_and_melina_abdullah_write_in_unaffiliated, -michael_yost_write_in_unaffiliated, -other_write_ins)
+
+
+#creating new simplified data frame with combined third-party vote
+md24 <- md24_with_third_party_breakdown |>
+  mutate(
+    third_party = oliver_ter_maat + stein_ware + kennedy_shanahan
+  )
+
+#deselecting third party candidate columns
+md24 <- md24 |>
+  select(-oliver_ter_maat, -stein_ware, -kennedy_shanahan)
 ```
 
 ```{r}
+#exploration
 
+#calculating total & percentages
+md24 <- md24 |>
+  mutate(
+    total = harris_walz + trump_vance + write_ins + third_party,
+    pct_harris_walz = harris_walz/total*100,
+    pct_trump_vance = trump_vance/total*100,
+    pct_write_ins = write_ins/total*100,
+    pct_third_party = third_party/total*100
+  )
+
+glimpse(md24)
+```
+
+### Maryland 2020 Election Data
+
+```{r}
+#loading & cleaning md 2020 data
+md20_raw <- read_csv("data/md_election_results_2020.csv") |>
+   clean_names()
+
+#renaming major candidate columnns & combining all write in columns
+md20_with_third_party_breakdown <- md20_raw |>
+  rename(
+    biden_harris = joe_biden_and_kamala_harris_democratic,
+    trump_pence = donald_j_trump_and_michael_pence_republican,
+    jorgensen_cohen = jo_jorgensen_and_jeremy_spike_cohen_libertarian,
+    gresham_hawkins_walker = howie_gresham_hawkins_and_angela_walker_green,
+    segal_de_graaf = jerome_m_segal_and_john_de_graaf_bread_and_roses
+    ) |>
+  mutate(
+    write_ins = (sharon_wallace_and_karen_m_short_write_in_democratic + dennis_andrew_ball_write_in_other + barbara_bellar_write_in_other + president_boddie_write_in_other + mary_ruth_caro_simmons_and_sherrie_dow_write_in_other + brian_carroll_write_in_other + todd_cella_write_in_other + mark_charles_and_adrian_wallace_write_in_other + phil_collins_write_in_other + roque_rocky_de_la_fuente_write_in_other + ryan_ehrenreich_and_veronica_ehrenreich_write_in_other + randall_foltyniewkz_write_in_other + tom_hoefling_and_andy_prior_write_in_other + shawn_howard_write_in_other + johnson_lee_write_in_other + susan_b_lochocki_write_in_other + brock_pierce_and_karia_ballard_write_in_other + deborah_rouse_and_sheila_cannon_write_in_other + peter_w_sherrill_write_in_other + jade_simmons_and_claudeligh_j_roze_write_in_other + kasey_wells_write_in_other + kanye_west_write_in_other + gloria_la_riva_and_sunil_freeman_write_in_unaffiliated + albert_raley_write_in_unaffiliated + benjamin_schwalb_write_in_unaffiliated + edward_shlikas_write_in_unaffiliated + other_write_ins)
+  )
+
+#deselecting write-in candidate columns
+md20_with_third_party_breakdown <- md20_with_third_party_breakdown |>
+  select(-sharon_wallace_and_karen_m_short_write_in_democratic, -dennis_andrew_ball_write_in_other, -barbara_bellar_write_in_other, -president_boddie_write_in_other, -mary_ruth_caro_simmons_and_sherrie_dow_write_in_other, -brian_carroll_write_in_other, -todd_cella_write_in_other, -mark_charles_and_adrian_wallace_write_in_other, -phil_collins_write_in_other, -roque_rocky_de_la_fuente_write_in_other, -ryan_ehrenreich_and_veronica_ehrenreich_write_in_other, -randall_foltyniewkz_write_in_other, -tom_hoefling_and_andy_prior_write_in_other, -shawn_howard_write_in_other, -johnson_lee_write_in_other, -susan_b_lochocki_write_in_other, -brock_pierce_and_karia_ballard_write_in_other, -deborah_rouse_and_sheila_cannon_write_in_other, -peter_w_sherrill_write_in_other, -jade_simmons_and_claudeligh_j_roze_write_in_other, -kasey_wells_write_in_other, -kanye_west_write_in_other, -gloria_la_riva_and_sunil_freeman_write_in_unaffiliated, -albert_raley_write_in_unaffiliated, -benjamin_schwalb_write_in_unaffiliated, -edward_shlikas_write_in_unaffiliated, -other_write_ins)
+
+#creating new simplified data frame with combined third-party vote
+md20 <- md20_with_third_party_breakdown |>
+  mutate(
+    third_party = jorgensen_cohen + gresham_hawkins_walker + segal_de_graaf
+  )
+
+#deselecting third party candidate columns
+md20 <- md20 |>
+  select(-jorgensen_cohen, -gresham_hawkins_walker, -segal_de_graaf)
 ```
 
 ```{r}
+#exploration
 
+#calculating total & percentages
+md20 <- md20 |>
+  mutate(
+    total = trump_pence + biden_harris + write_ins + third_party,
+    pct_trump_pence = trump_pence/total*100,
+    pct_biden_harris = biden_harris/total*100,
+    pct_write_ins = write_ins/total*100,
+    pct_third_party = third_party/total*100
+  )
+
+glimpse(md20)
+```
+
+```{r}
+#deliverable 2 write up
+
+#our core data sets are Maryland's 2020 and 2024 election data, which we loaded and cleaned above. cleaning primarily involved condensing the third-party and write-in columns to make the data easier to analyze. our basic analysis so far has included calculating the total number of votes cast in each election and the percentages of votes cast for each party, broken down by county. each data frame has 24 rows — one for each Maryland county — and 10 columns. the 10 columns include:
+  #the county name
+  #the number of votes cast for the democratic candidate
+  #the number of votes cast for the republican candidate
+  #the number of third-party votes
+  #the number of write-in votes
+  #the total number of votes
+  #the percentage of the total vote share that democratic, republican, third party and write-in candidates received
+
+#there aren't any obvious flaws with our current data sets, though it's important to point out that the 2024 results haven't been certified and therefore aren't yet official. the data sets do have their limitations when it comes to our questions, though, and it is clear that we will still need to load and clean a number of supplementary data sets to actually answer the questions we posed in deliverable 1. this will, at the very least, include:
+  #national election data
+  #Senate race data
+  #abortion ballot measure data
+  #census data
+
+#however, once we load and clean those data sets, we don't foresee any real issues with answering the questions we posed.
 ```

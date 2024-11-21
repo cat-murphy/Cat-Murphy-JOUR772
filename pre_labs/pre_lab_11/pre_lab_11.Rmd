@@ -293,7 +293,7 @@ Another popular use of text analysis is to measure the sentiment of a word - whe
 
 **Task** Run the following code and describe the results. Do any of the sentiments seem incorrect or counter-intuitive?
 
-**Answer**
+**Answer:** For the most part, the sentiments seem relatively reasonable — "freedom" as positive and "crisis" as negative, for example. But there were definitely a few that seemed ... wrong. Now, some are just kind of funny — like the word "dick" being deemed negative and the word "trump" being deemed positive. Of course, the computer is just going off the dictionary definitions of those words, which makes sense. But in reality, they were likely used in the contexts of Dick Durbin and Donald Trump, showing just how much context matters in determining the sentiment of a word. I was, however, particularly peeved by the characterization of one word: queer. Bing ascribed a negative sentiment to the word "queer," which is infuriating in a way I can't even begin to put into words. In short, though, this to me demonstrates the problem with allowing computers to determine what words mean out of context. Not only is it bound to fail, it can — as it does here — demonstrate systemic biases and reinforce negative stereotypes.
 
 ```{r}
 bing <- get_sentiments("bing")

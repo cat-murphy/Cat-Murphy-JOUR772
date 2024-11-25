@@ -80,7 +80,10 @@ stop_words <- stop_words |>
   add_row(word = "her") |>
   add_row(word = "attorney") |> 
   add_row(word = "client") |> 
-  add_row(word = "clients")
+  add_row(word = "clients") |>
+  add_row(word = "representation") |>
+  add_row(word = "respondent") |>
+  add_row(word = "conduct")
 ```
 
 ```{r}
@@ -90,10 +93,10 @@ uniques |>
   group_by(word) |>
   tally(sort=TRUE) |>
   mutate(percent = (n/sum(n))*100) |>
-  top_n(25)
+  top_n(10)
 ```
 
-**A1.**
+**A1.** Excluding general stop words like "the" and topical stop words like "attorney," the most prevalent word is "failing." Not only does the word "failing" appear more than any other word, it appears 2 1/2 times more than the next most common word. The word is used 1,571 times — more than once per sanction — and accounts for roughly 5% of all meaningful words. (And this doesn't even include the word "failed," which is also in the top 10.) The top 10 words, though, tell a broader story about the kind of misconduct attorneys are often sanctioned for. For example, the repetition of the words "funds," "trust" and "account" tells me that many attorneys are being sanctioned for misconduct involving money — actions like taking advantage of clients or stealing money. And words like "reprimand," "disbarred" and "suspension" illustrate the spectrum of punishments being handed down.
 
 ------------------------------------------------------------------------
 
@@ -114,14 +117,18 @@ attorney_sanctions_trigrams <- md_attorney_sanctions |>
   top_n(10)
 ```
 
-**A2.**
+**A2.** The top trigram in the sanction text is "conduct involving dishonesty," appearing a total of 155 times. In legal terminology, the phrase refers to things like violating the rules of professional conduct, committing a crime that impacts an attorney's trustworthiness or interfering with the administration of justice.
 
 ------------------------------------------------------------------------
 
 ##### **Q3.** Let's drop back down to more traditional text analysis - take the top trigram from Q2 and write code to see how many times it occurs in the text column in each fiscal year. What do you think the answer produced by your code suggests? What else could you do to try and clarify the most important reasons attorneys get sanctioned?
 
 ```{r}
-
+md_attorney_sanctions |>
+  filter(str_detect(text, "conduct involving dishonesty")) |>
+  group_by(fiscal_year) |>
+  summarise(count=n()) |>
+  arrange(desc(count))
 ```
 
-**A3.**
+**A3.** The year-by-year breakdown identifies a *fascinating* trend in the use of the phrase "conduct involving dishonesty" over time. Clearly, the prevalence of the phrase in attorney sanctions increased dramatically in the late 2010s. Case in point, between 2019 and 2022, the term appeared in sanctions more than 25 times per year. Keep in mind that it had never before appeared even half this many times in a single year. Weirdly, though, this dropped off a cliff in 2023, when the phrase only appeared twice. I don't really know how to explain this spike, but it definitely is interesting. It seems like the pandemic could explain some of the increase, but it wouldn't account for the 2019 figure. In any case, while the trigram method of text analysis is certainly insightful, I think it would helpful to group the sanctions using `str_detect`. Because many of the legal phrases — like "conduct involving dishonesty" — are so broad in scope, grouping the sanctions by specific terms would allow us to drill down which sanctions pertain to money, criminal activity, conflicts of interest, breaking confidentiality, etc.

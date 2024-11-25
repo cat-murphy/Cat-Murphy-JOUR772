@@ -117,7 +117,7 @@ attorney_sanctions_trigrams <- md_attorney_sanctions |>
   top_n(10)
 ```
 
-**A2.** The top trigram in the sanction text is "conduct involving dishonesty," appearing a total of 155 times. In legal terminology, the phrase refers to things like violating the rules of professional conduct, committing a crime that impacts an attorney's trustworthiness or interfering with the administration of justice.
+**A2.** The top trigram in the sanction text is "conduct involving dishonesty," appearing a total of 155 times. In legal terminology, the phrase refers to things like violating the rules of professional conduct, committing a crime that impacts an attorney's trustworthiness or interfering with the administration of justice. This would suggest that many of the sanctioned attorneys, regardless of their specific brand of misconduct, are ultimately accused of violating their clients' trust in one way or another.
 
 ------------------------------------------------------------------------
 

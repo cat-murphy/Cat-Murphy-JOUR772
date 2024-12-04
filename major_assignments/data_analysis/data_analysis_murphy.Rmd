@@ -133,9 +133,47 @@ glimpse(md20)
 
 #there aren't any obvious flaws with our current data sets, though it's important to point out that the 2024 results haven't been certified and therefore aren't yet official. the data sets do have their limitations when it comes to our questions, though, and it is clear that we will still need to load and clean a number of supplementary data sets to actually answer the questions we posed in deliverable 1. this will, at the very least, include:
   #national election data
-  #Senate race data
+  #2024 Senate race data
   #abortion ballot measure data
   #census data
 
 #however, once we load and clean those data sets, we don't foresee any real issues with answering the questions we posed.
 ```
+
+## Q1
+
+*Question: What percentage of voting-age people are registered to vote in Maryland? How many voted in 2024? How did this compare to 2020?*
+
+```{r}
+# load 2020 MD voter registration data
+md20_registered_voters_raw <- read_csv("data/md_voters_by_county_2020.csv") |>
+  clean_names()
+
+# load 2024 MD voter registration data
+md24_registered_voters_raw <- read_csv("data/md_voters_by_county_2024.csv") |>
+  clean_names()
+```
+
+```{r}
+# load MD voting-age population data
+md_population_raw <- get_acs(geography = "county",
+              variables = c(population_18_over = "B09021_001"),
+              state = "MD",
+              year = 2022) |>
+  clean_names()
+
+md_population <- md_population_raw |>
+  rename(population_18_over=estimate) |>
+  mutate(
+    name=gsub(', Maryland', '', name),
+    name=gsub(' County', '', name),
+    name=gsub('Baltimore', 'Baltimore County', name),
+    name=gsub('Baltimore County city', 'Baltimore City', name)
+    ) |>
+  select(-geoid, -variable, -moe)
+  
+```
+
+## Q2
+
+Question:

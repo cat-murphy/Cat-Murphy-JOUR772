@@ -58,11 +58,11 @@ md24 <- md24 |>
 #calculating total & percentages
 md24 <- md24 |>
   mutate(
-    total = harris_walz + trump_vance + write_ins + third_party,
-    pct_harris_walz = harris_walz/total*100,
-    pct_trump_vance = trump_vance/total*100,
-    pct_write_ins = write_ins/total*100,
-    pct_third_party = third_party/total*100
+    total_votes = harris_walz + trump_vance + write_ins + third_party,
+    pct_harris_walz = harris_walz/total_votes*100,
+    pct_trump_vance = trump_vance/total_votes*100,
+    pct_write_ins = write_ins/total_votes*100,
+    pct_third_party = third_party/total_votes*100
   )
 
 glimpse(md24)
@@ -109,11 +109,11 @@ md20 <- md20 |>
 #calculating total & percentages
 md20 <- md20 |>
   mutate(
-    total = trump_pence + biden_harris + write_ins + third_party,
-    pct_trump_pence = trump_pence/total*100,
-    pct_biden_harris = biden_harris/total*100,
-    pct_write_ins = write_ins/total*100,
-    pct_third_party = third_party/total*100
+    total_votes = trump_pence + biden_harris + write_ins + third_party,
+    pct_trump_pence = trump_pence/total_votes*100,
+    pct_biden_harris = biden_harris/total_votes*100,
+    pct_write_ins = write_ins/total_votes*100,
+    pct_third_party = third_party/total_votes*100
   )
 
 glimpse(md20)
@@ -146,32 +146,93 @@ glimpse(md20)
 
 ```{r}
 # load 2020 MD voter registration data
-md20_registered_voters_raw <- read_csv("data/md_voters_by_county_2020.csv") |>
-  clean_names()
+md20_registered_voters <- read_csv("data/md_voters_by_county_2020.csv") |>
+  clean_names() |>
+  slice(-25)
 
 # load 2024 MD voter registration data
-md24_registered_voters_raw <- read_csv("data/md_voters_by_county_2024.csv") |>
-  clean_names()
+md24_registered_voters <- read_csv("data/md_voters_by_county_2024.csv") |>
+  clean_names() |>
+  slice(-25)
 ```
 
 ```{r}
 # load MD voting-age population data
 md_population_raw <- get_acs(geography = "county",
-              variables = c(population_18_over = "B09021_001"),
+              variables = c(population_over_18 = "B09021_001"),
               state = "MD",
               year = 2022) |>
   clean_names()
-
+  
+# clean data
 md_population <- md_population_raw |>
-  rename(population_18_over=estimate) |>
+  rename(population_over_18=estimate) |>
+  select(-geoid, -variable, -moe)
+
+```
+
+```{r}
+# standarizing data spellings
+md_population <- md_population |>
   mutate(
     name=gsub(', Maryland', '', name),
     name=gsub(' County', '', name),
     name=gsub('Baltimore', 'Baltimore County', name),
     name=gsub('Baltimore County city', 'Baltimore City', name)
     ) |>
-  select(-geoid, -variable, -moe)
-  
+  rename(county=name)
+
+md20 <- md20 |>
+  mutate(
+    jurisdiction=gsub('Baltimore', 'Baltimore County', jurisdiction),
+    jurisdiction=gsub('Baltimore County City', 'Baltimore City', jurisdiction)
+    ) |>
+  rename(county=jurisdiction)
+
+md24 <- md24 |>
+  mutate(
+    jurisdiction=gsub('Saint Mary\'s', 'St. Mary\'s', jurisdiction)
+  ) |>
+  rename(county=jurisdiction)
+
+md20_registered_voters <- md20_registered_voters |>
+  mutate(
+    county=gsub('Saint Mary\'s', 'St. Mary\'s', county)
+  ) |>
+  rename(total_registered=total) |>
+  rename(registered_dem=dem) |>
+  rename(registered_rep=rep) |>
+  rename(registered_bar=bar) |>
+  rename(registered_grn=grn) |>
+  rename(registered_lib=lib) |>
+  rename(registered_wcp=wcp) |>
+  rename(registered_oth=oth) |>
+  rename(registered_una=una)
+
+md24_registered_voters <- md24_registered_voters |>
+  mutate(
+    county=gsub('Saint Mary\'s', 'St. Mary\'s', county)
+  ) |>
+  rename(total_registered=total) |>
+  rename(registered_dem=dem) |>
+  rename(registered_rep=rep) |>
+  rename(registered_lib=lib) |>
+  rename(registered_oth=oth) |>
+  rename(registered_una=una) |>
+  rename(registered_nlm=nlm) |>
+  rename(registered_grn=grn)
+```
+
+```{r}
+# join data
+md24_combined <- md_population |>
+  left_join(md24, join_by(county))
+
+md24_combined <- md24_combined |>
+  left_join(md24_registered_voters, join_by(county)) 
+
+md24_combined_totals <- md24_combined |>
+  select(-harris_walz, -trump_vance, -write_ins, -third_party, -pct_harris_walz, -pct_trump_vance, -pct_write_ins, -pct_third_party, -registered_dem, -registered_rep, -registered_lib, -registered_oth, -registered_una, -registered_nlm, -registered_grn)
 ```
 
 ## Q2

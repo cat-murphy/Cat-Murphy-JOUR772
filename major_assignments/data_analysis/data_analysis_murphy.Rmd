@@ -14,9 +14,9 @@ library(tidycensus)
 library(tigris)
 ```
 
-## Data Analysis Project
+# Data Analysis Project
 
-### Maryland 2024 Election Data
+## Maryland 2024 Election Data
 
 ```{r}
 #loading & cleaning md 2024 data
@@ -26,14 +26,14 @@ md24_raw <- read_csv("data/md_election_results_2024.csv") |>
 #renaming major candidate columnns & combining all write in columns
 md24_with_third_party_breakdown <- md24_raw |>
   rename(
-    harris_walz = kamala_d_harris_and_tim_walz_democratic,
-    trump_vance = donald_j_trump_and_jd_vance_republican,
-    oliver_ter_maat = chase_oliver_and_mike_ter_maat_libertarian,
-    stein_ware = jill_ellen_stein_and_rudolph_ware_green,
-    kennedy_shanahan = robert_f_kennedy_jr_and_nicole_shanahan_unaffiliated
+    harris_walz24 = kamala_d_harris_and_tim_walz_democratic,
+    trump_vance24 = donald_j_trump_and_jd_vance_republican,
+    oliver_ter_maat24 = chase_oliver_and_mike_ter_maat_libertarian,
+    stein_ware24 = jill_ellen_stein_and_rudolph_ware_green,
+    kennedy_shanahan24 = robert_f_kennedy_jr_and_nicole_shanahan_unaffiliated
     ) |>
   mutate(
-    write_ins = (sharon_e_harris_write_in_democratic + ralph_jaffe_write_in_democratic + paij_boring_and_jaimey_rutschman_write_in_republican + sethatina_newman_write_in_republican + carol_asher_write_in_other_candidates + jokie_beckett_jr_write_in_other_candidates + claudia_de_la_cruz_and_karina_garcia_write_in_other_candidates + john_r_gibb_jr_write_in_other_candidates + joseph_kishore_write_in_other_candidates + william_p_stodden_write_in_other_candidates + shiva_ayyadurai_and_crystal_ellis_write_in_unaffiliated + president_r_boddie_write_in_unaffiliated + theo_brown_sr_write_in_unaffiliated + susan_maude_buchser_write_in_unaffiliated + john_cheng_and_wayne_waligorski_write_in_unaffiliated + cherunda_fox_write_in_unaffiliated + garry_hubbard_and_elizabeth_seymour_write_in_unaffiliated + shondra_irving_write_in_unaffiliated + douglas_jenkins_write_in_unaffiliated + brian_larry_kienitz_write_in_unaffiliated + richard_mayers_write_in_unaffiliated + andre_ramon_mc_neil_sr_write_in_unaffiliated + future_madam_potus_and_jessica_kennedy_write_in_unaffiliated + benjamin_l_schwalb_write_in_unaffiliated + peter_sonski_write_in_unaffiliated + lester_h_waller_jr_write_in_unaffiliated + cornel_west_and_melina_abdullah_write_in_unaffiliated + michael_yost_write_in_unaffiliated + other_write_ins)
+    write_ins24 = (sharon_e_harris_write_in_democratic + ralph_jaffe_write_in_democratic + paij_boring_and_jaimey_rutschman_write_in_republican + sethatina_newman_write_in_republican + carol_asher_write_in_other_candidates + jokie_beckett_jr_write_in_other_candidates + claudia_de_la_cruz_and_karina_garcia_write_in_other_candidates + john_r_gibb_jr_write_in_other_candidates + joseph_kishore_write_in_other_candidates + william_p_stodden_write_in_other_candidates + shiva_ayyadurai_and_crystal_ellis_write_in_unaffiliated + president_r_boddie_write_in_unaffiliated + theo_brown_sr_write_in_unaffiliated + susan_maude_buchser_write_in_unaffiliated + john_cheng_and_wayne_waligorski_write_in_unaffiliated + cherunda_fox_write_in_unaffiliated + garry_hubbard_and_elizabeth_seymour_write_in_unaffiliated + shondra_irving_write_in_unaffiliated + douglas_jenkins_write_in_unaffiliated + brian_larry_kienitz_write_in_unaffiliated + richard_mayers_write_in_unaffiliated + andre_ramon_mc_neil_sr_write_in_unaffiliated + future_madam_potus_and_jessica_kennedy_write_in_unaffiliated + benjamin_l_schwalb_write_in_unaffiliated + peter_sonski_write_in_unaffiliated + lester_h_waller_jr_write_in_unaffiliated + cornel_west_and_melina_abdullah_write_in_unaffiliated + michael_yost_write_in_unaffiliated + other_write_ins)
   )
 
 #deselecting write-in candidate columns
@@ -44,12 +44,12 @@ md24_with_third_party_breakdown <- md24_with_third_party_breakdown |>
 #creating new simplified data frame with combined third-party vote
 md24 <- md24_with_third_party_breakdown |>
   mutate(
-    third_party = oliver_ter_maat + stein_ware + kennedy_shanahan
+    third_party24 = oliver_ter_maat24 + stein_ware24 + kennedy_shanahan24
   )
 
 #deselecting third party candidate columns
 md24 <- md24 |>
-  select(-oliver_ter_maat, -stein_ware, -kennedy_shanahan)
+  select(-oliver_ter_maat24, -stein_ware24, -kennedy_shanahan24)
 ```
 
 ```{r}
@@ -58,17 +58,15 @@ md24 <- md24 |>
 #calculating total & percentages
 md24 <- md24 |>
   mutate(
-    total_votes = harris_walz + trump_vance + write_ins + third_party,
-    pct_harris_walz = harris_walz/total_votes*100,
-    pct_trump_vance = trump_vance/total_votes*100,
-    pct_write_ins = write_ins/total_votes*100,
-    pct_third_party = third_party/total_votes*100
+    total_votes24 = harris_walz24 + trump_vance24 + write_ins24 + third_party24,
+    pct_harris_walz24 = harris_walz24/total_votes24*100,
+    pct_trump_vance24 = trump_vance24/total_votes24*100,
+    pct_write_ins24 = write_ins24/total_votes24*100,
+    pct_third_party24 = third_party24/total_votes24*100
   )
 
 glimpse(md24)
 ```
-
-### Maryland 2020 Election Data
 
 ```{r}
 #loading & cleaning md 2020 data
@@ -78,14 +76,14 @@ md20_raw <- read_csv("data/md_election_results_2020.csv") |>
 #renaming major candidate columnns & combining all write in columns
 md20_with_third_party_breakdown <- md20_raw |>
   rename(
-    biden_harris = joe_biden_and_kamala_harris_democratic,
-    trump_pence = donald_j_trump_and_michael_pence_republican,
-    jorgensen_cohen = jo_jorgensen_and_jeremy_spike_cohen_libertarian,
-    gresham_hawkins_walker = howie_gresham_hawkins_and_angela_walker_green,
-    segal_de_graaf = jerome_m_segal_and_john_de_graaf_bread_and_roses
+    biden_harris20 = joe_biden_and_kamala_harris_democratic,
+    trump_pence20 = donald_j_trump_and_michael_pence_republican,
+    jorgensen_cohen20 = jo_jorgensen_and_jeremy_spike_cohen_libertarian,
+    gresham_hawkins_walker20 = howie_gresham_hawkins_and_angela_walker_green,
+    segal_de_graaf20 = jerome_m_segal_and_john_de_graaf_bread_and_roses
     ) |>
   mutate(
-    write_ins = (sharon_wallace_and_karen_m_short_write_in_democratic + dennis_andrew_ball_write_in_other + barbara_bellar_write_in_other + president_boddie_write_in_other + mary_ruth_caro_simmons_and_sherrie_dow_write_in_other + brian_carroll_write_in_other + todd_cella_write_in_other + mark_charles_and_adrian_wallace_write_in_other + phil_collins_write_in_other + roque_rocky_de_la_fuente_write_in_other + ryan_ehrenreich_and_veronica_ehrenreich_write_in_other + randall_foltyniewkz_write_in_other + tom_hoefling_and_andy_prior_write_in_other + shawn_howard_write_in_other + johnson_lee_write_in_other + susan_b_lochocki_write_in_other + brock_pierce_and_karia_ballard_write_in_other + deborah_rouse_and_sheila_cannon_write_in_other + peter_w_sherrill_write_in_other + jade_simmons_and_claudeligh_j_roze_write_in_other + kasey_wells_write_in_other + kanye_west_write_in_other + gloria_la_riva_and_sunil_freeman_write_in_unaffiliated + albert_raley_write_in_unaffiliated + benjamin_schwalb_write_in_unaffiliated + edward_shlikas_write_in_unaffiliated + other_write_ins)
+    write_ins20 = (sharon_wallace_and_karen_m_short_write_in_democratic + dennis_andrew_ball_write_in_other + barbara_bellar_write_in_other + president_boddie_write_in_other + mary_ruth_caro_simmons_and_sherrie_dow_write_in_other + brian_carroll_write_in_other + todd_cella_write_in_other + mark_charles_and_adrian_wallace_write_in_other + phil_collins_write_in_other + roque_rocky_de_la_fuente_write_in_other + ryan_ehrenreich_and_veronica_ehrenreich_write_in_other + randall_foltyniewkz_write_in_other + tom_hoefling_and_andy_prior_write_in_other + shawn_howard_write_in_other + johnson_lee_write_in_other + susan_b_lochocki_write_in_other + brock_pierce_and_karia_ballard_write_in_other + deborah_rouse_and_sheila_cannon_write_in_other + peter_w_sherrill_write_in_other + jade_simmons_and_claudeligh_j_roze_write_in_other + kasey_wells_write_in_other + kanye_west_write_in_other + gloria_la_riva_and_sunil_freeman_write_in_unaffiliated + albert_raley_write_in_unaffiliated + benjamin_schwalb_write_in_unaffiliated + edward_shlikas_write_in_unaffiliated + other_write_ins)
   )
 
 #deselecting write-in candidate columns
@@ -95,13 +93,15 @@ md20_with_third_party_breakdown <- md20_with_third_party_breakdown |>
 #creating new simplified data frame with combined third-party vote
 md20 <- md20_with_third_party_breakdown |>
   mutate(
-    third_party = jorgensen_cohen + gresham_hawkins_walker + segal_de_graaf
+    third_party20 = jorgensen_cohen20 + gresham_hawkins_walker20 + segal_de_graaf20
   )
 
 #deselecting third party candidate columns
 md20 <- md20 |>
-  select(-jorgensen_cohen, -gresham_hawkins_walker, -segal_de_graaf)
+  select(-jorgensen_cohen20, -gresham_hawkins_walker20, -segal_de_graaf20)
 ```
+
+## Data Exploration
 
 ```{r}
 #exploration
@@ -109,11 +109,11 @@ md20 <- md20 |>
 #calculating total & percentages
 md20 <- md20 |>
   mutate(
-    total_votes = trump_pence + biden_harris + write_ins + third_party,
-    pct_trump_pence = trump_pence/total_votes*100,
-    pct_biden_harris = biden_harris/total_votes*100,
-    pct_write_ins = write_ins/total_votes*100,
-    pct_third_party = third_party/total_votes*100
+    total_votes20 = trump_pence20 + biden_harris20 + write_ins20 + third_party20,
+    pct_trump_pence20 = trump_pence20/total_votes20*100,
+    pct_biden_harris20 = biden_harris20/total_votes20*100,
+    pct_write_ins20 = write_ins20/total_votes20*100,
+    pct_third_party20 = third_party20/total_votes20*100
   )
 
 glimpse(md20)
@@ -140,40 +140,47 @@ glimpse(md20)
 #however, once we load and clean those data sets, we don't foresee any real issues with answering the questions we posed.
 ```
 
-## Q1
-
-*Question: What percentage of voting-age people are registered to vote in Maryland? How many voted in 2024? How did this compare to 2020?*
+## Maryland Voter Registration Data
 
 ```{r}
-# load 2020 MD voter registration data
-md20_registered_voters <- read_csv("data/md_voters_by_county_2020.csv") |>
-  clean_names() |>
-  slice(-25)
-
 # load 2024 MD voter registration data
 md24_registered_voters <- read_csv("data/md_voters_by_county_2024.csv") |>
   clean_names() |>
   slice(-25)
+
+# load 2020 MD voter registration data
+md20_registered_voters <- read_csv("data/md_voters_by_county_2020.csv") |>
+  clean_names() |>
+  slice(-25)
 ```
+
+## Maryland Population Data
 
 ```{r}
 # load MD voting-age population data
-md_population_raw <- get_acs(geography = "county",
+md_population22_raw <- get_acs(geography = "county",
               variables = c(population_over_18 = "B09021_001"),
               state = "MD",
               year = 2022) |>
   clean_names()
   
 # clean data
-md_population <- md_population_raw |>
+md_population22 <- md_population22_raw |>
   rename(population_over_18=estimate) |>
   select(-geoid, -variable, -moe)
-
 ```
 
+————————————————————————————————————————————————————
+
+## Q1
+
+*Question: How many registered voters were there in Maryland in 2024? What percentage of voting-age people are registered to vote? What percentage of them voted in 2024? How did this compare to 2020? How did this compare by county? How did this compare nationally?*
+
+### Standardizing 
+
 ```{r}
-# standarizing data spellings
-md_population <- md_population |>
+# standardizing data spellings
+md_population22 <- md_population22 |>
   mutate(
     name=gsub(', Maryland', '', name),
     name=gsub(' County', '', name),
@@ -182,6 +189,12 @@ md_population <- md_population |>
     ) |>
   rename(county=name)
 
+md24 <- md24 |>
+  mutate(
+    jurisdiction=gsub('Saint Mary\'s', 'St. Mary\'s', jurisdiction)
+  ) |>
+  rename(county=jurisdiction)
+
 md20 <- md20 |>
   mutate(
     jurisdiction=gsub('Baltimore', 'Baltimore County', jurisdiction),
@@ -189,52 +202,282 @@ md20 <- md20 |>
     ) |>
   rename(county=jurisdiction)
 
-md24 <- md24 |>
+md24_registered_voters <- md24_registered_voters |>
   mutate(
-    jurisdiction=gsub('Saint Mary\'s', 'St. Mary\'s', jurisdiction)
+    county=gsub('Saint Mary\'s', 'St. Mary\'s', county)
   ) |>
-  rename(county=jurisdiction)
+  rename(total_registered24=total) |>
+  rename(registered_dem24=dem) |>
+  rename(registered_rep24=rep) |>
+  rename(registered_lib24=lib) |>
+  rename(registered_oth24=oth) |>
+  rename(registered_una24=una) |>
+  rename(registered_nlm24=nlm) |>
+  rename(registered_grn24=grn)
 
 md20_registered_voters <- md20_registered_voters |>
   mutate(
     county=gsub('Saint Mary\'s', 'St. Mary\'s', county)
   ) |>
-  rename(total_registered=total) |>
-  rename(registered_dem=dem) |>
-  rename(registered_rep=rep) |>
-  rename(registered_bar=bar) |>
-  rename(registered_grn=grn) |>
-  rename(registered_lib=lib) |>
-  rename(registered_wcp=wcp) |>
-  rename(registered_oth=oth) |>
-  rename(registered_una=una)
-
-md24_registered_voters <- md24_registered_voters |>
-  mutate(
-    county=gsub('Saint Mary\'s', 'St. Mary\'s', county)
-  ) |>
-  rename(total_registered=total) |>
-  rename(registered_dem=dem) |>
-  rename(registered_rep=rep) |>
-  rename(registered_lib=lib) |>
-  rename(registered_oth=oth) |>
-  rename(registered_una=una) |>
-  rename(registered_nlm=nlm) |>
-  rename(registered_grn=grn)
+  rename(total_registered20=total) |>
+  rename(registered_dem20=dem) |>
+  rename(registered_rep20=rep) |>
+  rename(registered_bar20=bar) |>
+  rename(registered_grn20=grn) |>
+  rename(registered_lib20=lib) |>
+  rename(registered_wcp20=wcp) |>
+  rename(registered_oth20=oth) |>
+  rename(registered_una20=una)
 ```
 
+### Joining
+
 ```{r}
-# join data
-md24_combined <- md_population |>
+# join 2024 data
+md24_combined <- md_population22 |>
   left_join(md24, join_by(county))
 
 md24_combined <- md24_combined |>
   left_join(md24_registered_voters, join_by(county)) 
 
 md24_combined_totals <- md24_combined |>
-  select(-harris_walz, -trump_vance, -write_ins, -third_party, -pct_harris_walz, -pct_trump_vance, -pct_write_ins, -pct_third_party, -registered_dem, -registered_rep, -registered_lib, -registered_oth, -registered_una, -registered_nlm, -registered_grn)
+  select(-harris_walz24, -trump_vance24, -write_ins24, -third_party24, -pct_harris_walz24, -pct_trump_vance24, -pct_write_ins24, -pct_third_party24, -registered_dem24, -registered_rep24, -registered_lib24, -registered_oth24, -registered_una24, -registered_nlm24, -registered_grn24)
+
+# join 2020 data
+md20_combined <- md_population22 |>
+  left_join(md20, join_by(county))
+
+md20_combined <- md20_combined |>
+  left_join(md20_registered_voters, join_by(county))
+
+md20_combined_totals <- md20_combined |>
+  select(-trump_pence20, -biden_harris20,  -write_ins20, -third_party20, -pct_trump_pence20, -pct_biden_harris20, -pct_write_ins20, -pct_third_party20, -registered_dem20, -registered_rep20, -registered_bar20, -registered_grn20, -registered_lib20, -registered_wcp20, -registered_oth20, -registered_una20)
+```
+
+### County Calculations
+
+```{r}
+# calculate pcts by county 2024
+md24_combined_totals <- md24_combined_totals |>
+  mutate(
+    pct_registered_that_voted24=total_votes24/total_registered24*100
+  )
+
+# calculate pcts by county 2020
+md20_combined_totals <- md20_combined_totals |>
+  mutate(
+    pct_registered_that_voted20=total_votes20/total_registered20*100
+  )
+
+# compare 2024 to 2020 by county
+md20_md24_combined <- md24_combined_totals |>
+  left_join(md20_combined_totals, join_by(county))
+
+md20_md24_combined <- md20_md24_combined |>
+  select(-population_over_18.x, -population_over_18.y) |>
+  mutate(
+    diff_votes=total_votes24-total_votes20,
+    diff_registered=total_registered24-total_registered20,
+    diff_pct_voted=pct_registered_that_voted24-pct_registered_that_voted20
+  )
+```
+
+### Statewide Calculations 
+
+```{r}
+# calculate statewide figures
+
+# calculate # of registered voters in 2024
+
+sum(md24_combined_totals$total_registered24)
+
+    # answer: 4,204,572
+
+# calculate statewide % of registered voters who voted in 2024
+sum(md24_combined_totals$total_votes24)/sum(md24_combined_totals$total_registered24)*100
+
+    # answer: 70.00%
+
+# calculate # of registered voters in 2020
+
+sum(md20_combined_totals$total_registered20)
+
+    # answer: 4,109,762
+
+# calculate statewide % of registered voters who voted in 2020
+sum(md20_combined_totals$total_votes20)/sum(md20_combined_totals$total_registered20)*100
+
+    # answer: 73.90%
+
+# statewide difference in total registered
+sum(md24_combined_totals$total_registered24)-sum(md20_combined_totals$total_registered20)
+
+    # answer: maryland had 94,810 more registered voters in 2024 compared to 2020
+
+# statewide difference in total votes
+sum(md24_combined_totals$total_votes24)-sum(md20_combined_totals$total_votes20)
+
+    # answer: 93,742 fewer people voted in Maryland in 2024 compared to 2020
+```
+
+### Answers, Issues & Notable Findings
+
+```{r}
+# ANSWERS, ISSUES & NOTABLE FINDINGS:
+
+    # How many registered voters were there in Maryland in 2024? 
+  
+        #  4,204,572
+  
+    # What percentage of voting-age people are registered to vote?
+  
+        # cannot be answered because population in some counties has grown so much since 2022 that the percentages don't even make sense. in queen anne's, for example, the calculations showed that 104% of the population was registered to vote.
+  
+    # What percentage of registered voters actually voted in 2024? 
+  
+        # 70.00%
+  
+    # How did this compare to 2020? 
+  
+        # maryland had 94,810 more registered voters in 2024 compared to 2020
+  
+        # however, 93,742 fewer people voted in 2024 than in 2020
+  
+        # the percentage of registered voters who voted in Maryland dropped 3.9 percentage points between 2020 and 2024
+  
+    # How did this compare by county?
+  
+        # the percentage of registered voters who voted increased in only five counties — Calvert, Washington, Cecil, Allegany and St. Mary's — between 2020 and 2024
+  
+        # PG County saw the largest drop in voter turnout among (-8.65 percentage points) between 2020 and 2024
+  
+        # Baltimore City had the lowest turnout among registered voters in both 2020 (59.41%) and 2024 (53.63%)
+  
+        # Talbot County had the highest rate of voter turnout in 2024 (80.08%)
+  
+        # the number of registered voters slightly decreased in Allegany County and Baltimore City between 2020 and 2024
+  
+    # How did this compare nationally?
+  
+        # cannot be answered due to lack of available data on voter registration
 ```
 
 ## Q2
 
-Question:
+*Question: How did Trump and Harris perform in MD? How did they perform in each county? How did they perform compared to 2020? Compared to nationally?*
+
+### County Calculations
+
+```{r}
+# calculate per county numbers
+
+md24_md20 <- md24 |>
+  left_join(md20, join_by(county))
+
+md24_md20_main_candidates <- md24_md20 |>
+  select(-trump_vance24, -harris_walz24, -write_ins24, -third_party24, -total_votes24, -pct_write_ins24, -trump_pence20, -biden_harris20, -total_votes20, -pct_third_party24, -write_ins20, -third_party20, -pct_write_ins20, -pct_third_party20) |>
+  mutate(
+    diff_pct_rep = pct_trump_vance24-pct_trump_pence20,
+    diff_pct_dem = pct_harris_walz24-pct_biden_harris20
+  )
+
+# create column for county winners
+md24_md20_main_candidates <- md24_md20_main_candidates |>
+  mutate(
+    winner20 = case_when(
+      pct_biden_harris20-pct_trump_pence20 >= 0.00001 ~ "DEMOCRAT",
+      pct_trump_pence20-pct_biden_harris20 >= 0.00001 ~ "REPUBLICAN"),
+    winner24 = case_when(
+      pct_harris_walz24-pct_trump_vance24 >= 0.00001 ~ "DEMOCRAT",
+      pct_trump_vance24-pct_harris_walz24 >= 0.00001 ~ "REPUBLICAN")
+  )
+
+# group by county winner 2024
+md24_md20_main_candidates |>
+  group_by(winner24) |>
+  summarise(count=n())
+
+    # answer: republicans won 16 counties, democrats won 8
+
+# group by winner 2020
+md24_md20_main_candidates |>
+  group_by(winner20) |>
+  summarise(count=n())
+
+    # answer: republicans won 14 counties, democrats won 10
+```
+
+### Statewide Calculations
+
+```{r}
+# calculate statewide figures
+
+# calculate pct of votes democrats won statewide in 2024
+sum(md24_md20$harris_walz24)/sum(md24_md20$total_votes24)*100
+
+    # answer: 62.18%
+
+# calculate pct of votes republicans won statewide in 2024
+sum(md24_md20$trump_vance24)/sum(md24_md20$total_votes24)*100
+
+    # answer: 34.54%
+
+# calculate pct of votes democrats won statewide in 2020
+sum(md24_md20$biden_harris20)/sum(md24_md20$total_votes20)*100
+
+    # answer: 65.36%
+
+# calculate pct of votes republicans won statewide in 2020
+sum(md24_md20$trump_pence20)/sum(md24_md20$total_votes20)*100
+
+    # answer: 32.15%
+
+# calculate difference — democrats
+(sum(md24_md20$harris_walz24)/sum(md24_md20$total_votes24)*100)-(sum(md24_md20$biden_harris20)/sum(md24_md20$total_votes20)*100)
+
+    # answer: -3.1767
+
+# calculate difference — republicans
+
+(sum(md24_md20$trump_vance24)/sum(md24_md20$total_votes24)*100)-sum(md24_md20$trump_pence20)/sum(md24_md20$total_votes20)*100
+
+    # answer: 2.3897
+```
+
+### Answers, Issues & Notable Findings
+
+```{r}
+# ANSWERS, ISSUES & NOTABLE FINDINGS:
+
+    # How did Trump and Harris perform in MD? 
+
+        # Trump won 34.54% of the vote statewide
+  
+        # Harris won 62.18% of the vote statewide 48.4%
+  
+    # How did they perform in each county? 
+
+        # Trump won 2/3 of Maryland counties (most of the state's small, rural counties)
+
+        # Harris won each of Maryland's seven most populous counties, and won three of them with roughly 75% of the vote or more (PG, Baltimore City & Montgomery)
+  
+    # How did they perform compared to 2020?
+
+        # Democrats saw their vote share drop 3.17 percentage points statewide in 2024
+
+        # Republicans saw their vote share rise by nearly 2.4 points
+
+        # Democrats only gained ground in Garrett County, reddest county by over 6 points — and even then, they only increased their vote share from 21.02% in 2020 to 21.82% in 2024 
+
+        # In one county, Charles County, both candidates won a smaller percentage of the vote than their party's 2020 candidate, though the shift slightly favored Trump
+
+        # While this shows that Maryland meaningfully shifted to the right between 2020 and 2024, it also shows that more people shifted AWAY from Democrats than TOWARD Republicans 
+
+        # Montgomery County saw the greatest shift away from Democrats (-4.14 points) and toward Republicans (+2.76 points), even though Democrats won the county with nearly 75% of the vote
+
+        # Two counties, Kent and Talbot, flipped from Democrat to Republican between 2020 and 2024
+  
+    # How did they perform in MD compared to nationally?
+
+        # Harris won 48.4% of the vote nationally, meaning she overperformed in MD by about 14 points
+```

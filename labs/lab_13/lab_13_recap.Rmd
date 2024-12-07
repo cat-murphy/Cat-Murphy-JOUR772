@@ -17,11 +17,13 @@ Run the codeblock below to load the packages we will need for this recap
 
 ```{r}
 library(tidyverse)
+library(tidytext)
 library(lubridate)
 library(janitor)
 library(tigris)
 library(tidycensus)
 library(corrr)
+library(rvest)
 ```
 
 ## Load Data
@@ -39,15 +41,18 @@ childcare_inspections$fips <- as.character(childcare_inspections$fips)
 
 ```{r}
 # This loads the county data
-md_counties <- counties() |>  filter(STATEFP == "24")
+md_counties <- counties() |>  
+  filter(STATEFP == "24")
 ```
 
 ```{r}
 # Join the childcare data with the county data 
-
+inspections_with_counties <- md_counties |>
+  left_join(childcare_inspections, join_by("GEOID"=="fips")) |>
+  clean_names()
 ```
 
-##### A1:
+**A1:** There are two columns that list the county names: "name" and "namelsad." In order to avoid confusion, the column "namelsad" should always be used to identify the county name. Why? Because of Baltimore. In the "name" column, both Baltimore County and Baltimore City are listed simply as "Baltimore." This column is therefore useless, as it makes the two distinct geographies indistinguishable. The "namelsad" column, meanwhile, follows each county name with the word "county" and identifies Baltimore City as such. It is thus the preferable choice because Baltimore County and Baltimore City appear as distinct entries.
 
 ------------------------------------------------------------------------
 
@@ -56,11 +61,25 @@ md_counties <- counties() |>  filter(STATEFP == "24")
 ```{r}
 # Calculate the percentage of overdue inspections per county
 
-# Create the chart with ggplot
+inspections_with_counties <- inspections_with_counties |>
+  mutate(
+    pct_overdue=overdue/total*100
+  )
 
+# Create the chart with ggplot
+inspections_with_counties |>
+  ggplot() +
+  geom_bar(aes(x=reorder(namelsad, pct_overdue), weight=pct_overdue)) +
+  coord_flip() +
+  labs(
+    title="Maryland Counties by Percentage of Overdue Chilcare Inspections",
+    x = "county",
+    y = "percentage of overdue childcare inspections",
+    caption = "source: USAFacts"
+  )
 ```
 
-##### **A2:**
+**A2:** Montgomery County has the greatest percentage of childcare facilities with overdue inspections at over 65%.
 
 ------------------------------------------------------------------------
 
@@ -68,32 +87,47 @@ md_counties <- counties() |>  filter(STATEFP == "24")
 
 ```{r}
 # First, grab data from the ACS. The ACS variable for children age under 5 is B06001_002 We want 2022 data.
-
+md_children <- get_acs(geography = "county",
+              variables = c(children_under_5 = "B06001_002"),
+              state = "MD",
+              year = 2022)
 ```
 
 ```{r}
 # Rename the column name 'estimate', which has our population data, with something more useful, like 'children_pop'
-
+md_children <- md_children |>
+  rename(children_under_5=estimate) |>
+  select(-variable) |>
+  clean_names()
 ```
 
 ```{r}
 # Join the dataframes
+inspections_with_counties_and_population <- inspections_with_counties |>
+  left_join(md_children, join_by(geoid)) |>
+  select(-name.x, -name.y)
 
 # Calculate the rates for children per facility
-
+inspections_with_counties_and_population <- inspections_with_counties_and_population |>
+  mutate(
+    children_per_facility=children_under_5/total
+  )
 ```
 
-##### **A3:**
+**A3:**
 
 ------------------------------------------------------------------------
 
 #### **Q4** Make a map of the results for question 3. Are there any areas of the state that are more lacking in childcare facilities?
 
 ```{r}
-
+ggplot() +
+  geom_sf(data=inspections_with_counties_and_population, aes(fill=children_per_facility)) +
+  scale_colour_viridis_b(option="magma") +
+  theme_minimal()
 ```
 
-##### **A4**:
+**A4**:
 
 ------------------------------------------------------------------------
 
@@ -101,30 +135,41 @@ md_counties <- counties() |>  filter(STATEFP == "24")
 
 ```{r}
 # Again, grab data from the ACS. The ACS variable for median income is B19013_001. We want 2022 data again.
-
+md_median_income <- get_acs(geography = "county",
+              variables = c(median_income = "B19013_001"),
+              state = "MD",
+              year = 2022)
 ```
 
 ```{r}
 # Rename the column name 'estimate', which has our income data, with something more useful, like 'median_income'
-
+md_median_income <- md_median_income |>
+  rename(median_income=estimate) |>
+  select(-variable) |>
+  clean_names()
 ```
 
 ```{r}
 # Join the dataframes
-
+inspections_with_counties_and_population_and_income <- inspections_with_counties_and_population |>
+  left_join(md_median_income, join_by(geoid)) |>
+  select(-name)
 ```
 
 ```{r}
 # Create a scatterplot with median income and rate of children per facility
-
+inspections_with_counties_and_population_and_income |>
+  ggplot(aes(x = children_per_facility, y = median_income)) +
+  geom_point() +
+  geom_smooth(method=lm)
 ```
 
 ```{r}
 # Create a correlation test.
-
+cor.test(inspections_with_counties_and_population_and_income$median_income, inspections_with_counties_and_population_and_income$children_per_facility)
 ```
 
-##### A5:
+A5:
 
 ------------------------------------------------------------------------
 
@@ -132,17 +177,69 @@ md_counties <- counties() |>  filter(STATEFP == "24")
 
 ```{r}
 # Read the reports data
-reports <- read_csv('data/childcare-informal-provider-inspections.csv') |> clean_names()
+reports <- read_csv('data/childcare-informal-provider-inspections.csv') |> 
+  clean_names()
 ```
 
 ```{r}
 # Create a stopword dictionary (feel free to include more words)
-
+stop_words <- stop_words |> 
+  add_row(word = "with") |> 
+  add_row(word = "s") |> 
+  add_row(word = "h") |>
+  add_row(word = "and") |>
+  add_row(word = "standards") |>
+  add_row(word = 'the') |> 
+  add_row(word = 'a') |> 
+  add_row(word = 'for') |> 
+  add_row(word = 'to') |> 
+  add_row(word = "not") |> 
+  add_row(word = "in") |> 
+  add_row(word = "non") |> 
+  add_row(word = "epp") |>
+  add_row(word = "items") |>
+  add_row(word = "compliant")
 ```
 
 ```{r}
 # Unnest tokens into bigrams, removing stop words and repasting bigrams, list bigrams
+uniques <- reports |> 
+  select(initial_findings) |>
+  unnest_tokens(word, initial_findings)
 
+view(uniques)
+
+uniques |>
+  anti_join(stop_words) |>
+  group_by(word) |>
+  tally(sort=TRUE) |>
+  mutate(percent = (n/sum(n))*100) |>
+  top_n(10)
+
+uniques |>
+  count(word, sort = TRUE) |>
+  top_n(25) |>
+  mutate(word = reorder(word, n)) |>
+  ggplot(aes(x = word, y = n)) +
+  geom_col() +
+  xlab(NULL) +
+  coord_flip() +
+      labs(x = "unique words",
+      y = "count",
+      title = "Count of unique words found in Maryland childcare inspections")
+
+reports_bigrams <- reports |>
+  unnest_tokens(bigram, initial_findings, token = "ngrams", n = 2) |>
+  separate(bigram, c("word1", "word2"), sep = " ") |>
+  filter(!word1 %in% stop_words$word) |>
+  filter(!word2 %in% stop_words$word) |>
+  mutate(bigram = paste(word1, word2, sep=" ")) |>
+  group_by(bigram) |>
+  tally(sort=TRUE) |>
+  mutate(percent = (n/sum(n))*100) |>
+  top_n(10)
+
+reports_bigrams
 ```
 
-##### A6:
+A6:

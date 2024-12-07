@@ -52,7 +52,7 @@ inspections_with_counties <- md_counties |>
   clean_names()
 ```
 
-**A1:** There are two columns that list the county names: "name" and "namelsad." In order to avoid confusion, the column "namelsad" should always be used to identify the county name. Why? Because of Baltimore. In the "name" column, both Baltimore County and Baltimore City are listed simply as "Baltimore." This column is therefore useless, as it makes the two distinct geographies indistinguishable. The "namelsad" column, meanwhile, follows each county name with the word "county" and identifies Baltimore City as such. It is thus the preferable choice because Baltimore County and Baltimore City appear as distinct entries.
+##### **A1:** There are two columns that list the county names: "name" and "namelsad." In order to avoid confusion, the column "namelsad" should always be used to identify the county name. Why? Because of Baltimore. In the "name" column, both Baltimore County and Baltimore City are listed simply as "Baltimore." This column is therefore useless, as it makes the two distinct geographies indistinguishable. The "namelsad" column, meanwhile, follows each county name with the word "county" and identifies Baltimore City as such. It is thus the preferable choice because Baltimore County and Baltimore City appear as distinct entries.
 
 ------------------------------------------------------------------------
 
@@ -79,7 +79,7 @@ inspections_with_counties |>
   )
 ```
 
-**A2:** Montgomery County has the greatest percentage of childcare facilities with overdue inspections at over 65%.
+##### **A2:** Montgomery County has the greatest percentage of childcare facilities with overdue inspection reports (65.86%).
 
 ------------------------------------------------------------------------
 
@@ -87,7 +87,7 @@ inspections_with_counties |>
 
 ```{r}
 # First, grab data from the ACS. The ACS variable for children age under 5 is B06001_002 We want 2022 data.
-md_children <- get_acs(geography = "county",
+children <- get_acs(geography = "county",
               variables = c(children_under_5 = "B06001_002"),
               state = "MD",
               year = 2022)
@@ -95,7 +95,7 @@ md_children <- get_acs(geography = "county",
 
 ```{r}
 # Rename the column name 'estimate', which has our population data, with something more useful, like 'children_pop'
-md_children <- md_children |>
+children <- children |>
   rename(children_under_5=estimate) |>
   select(-variable) |>
   clean_names()
@@ -104,7 +104,7 @@ md_children <- md_children |>
 ```{r}
 # Join the dataframes
 inspections_with_counties_and_population <- inspections_with_counties |>
-  left_join(md_children, join_by(geoid)) |>
+  left_join(children, join_by(geoid)) |>
   select(-name.x, -name.y)
 
 # Calculate the rates for children per facility
@@ -114,7 +114,7 @@ inspections_with_counties_and_population <- inspections_with_counties_and_popula
   )
 ```
 
-**A3:**
+##### **A3: Garrett County has the highest child-to-childcare facility ratio with a rate of over 87 children per facility.**
 
 ------------------------------------------------------------------------
 
@@ -123,11 +123,10 @@ inspections_with_counties_and_population <- inspections_with_counties_and_popula
 ```{r}
 ggplot() +
   geom_sf(data=inspections_with_counties_and_population, aes(fill=children_per_facility)) +
-  scale_colour_viridis_b(option="magma") +
-  theme_minimal()
+  scale_fill_viridis_b(option="magma",trans = "log")
 ```
 
-**A4**:
+##### A4: It appears as though Western and Central Maryland are the most strapped for childcare, with most counties only having one childcare facility for every 50-70 children. This comes in stark contrast to Southern Maryland, where all but a few counties have one childcare facility for ever 30-40 children.
 
 ------------------------------------------------------------------------
 
@@ -135,7 +134,7 @@ ggplot() +
 
 ```{r}
 # Again, grab data from the ACS. The ACS variable for median income is B19013_001. We want 2022 data again.
-md_median_income <- get_acs(geography = "county",
+median_income <- get_acs(geography = "county",
               variables = c(median_income = "B19013_001"),
               state = "MD",
               year = 2022)
@@ -143,7 +142,7 @@ md_median_income <- get_acs(geography = "county",
 
 ```{r}
 # Rename the column name 'estimate', which has our income data, with something more useful, like 'median_income'
-md_median_income <- md_median_income |>
+median_income <- median_income |>
   rename(median_income=estimate) |>
   select(-variable) |>
   clean_names()
@@ -152,7 +151,7 @@ md_median_income <- md_median_income |>
 ```{r}
 # Join the dataframes
 inspections_with_counties_and_population_and_income <- inspections_with_counties_and_population |>
-  left_join(md_median_income, join_by(geoid)) |>
+  left_join(median_income, join_by(geoid)) |>
   select(-name)
 ```
 
@@ -169,7 +168,7 @@ inspections_with_counties_and_population_and_income |>
 cor.test(inspections_with_counties_and_population_and_income$median_income, inspections_with_counties_and_population_and_income$children_per_facility)
 ```
 
-A5:
+##### A5: As if the underwhelming scatterplot wasn't clear enough, the correlation test shows almost unequivocally that there is little to no correlation between median income and the number of children per childcare facility. Case in point, the r-value is a mere -0.11, meaning there is a very weak negative correlation between the variables. The t-value, meanwhile, is a very weak -0.5223 — yet another indication that the relationship between the variables is statistically meaningless. Likewise, the p-value is a sky-high 0.6067 — 12 times higher than a scientifically significant p-value of less than 0.05. In concert, these values all indicate that the correlation is both too weak and too random to be statistically relevant.
 
 ------------------------------------------------------------------------
 
@@ -242,4 +241,4 @@ reports_bigrams <- reports |>
 reports_bigrams
 ```
 
-A6:
+##### A6: The list of common bigrams shows that lack of emergency preparation is by far the most cited issue in childcare inspection reports. Case in point, six of the top 10 bigrams identified in the initial findings section relate to emergency preparation, and two of those bigrams include the word "missing." This equates to 67 individual references in total. The overwhelming prevalence of references to emergency preparation was made even clearer when I researched what "ertg" and "ecma" mean. Evidently, they refer to "emergency ready to-go" bags and "emergency care and medical authorization" documents. In other words, the bigrams "emergency bag," "emergency ready" and "ertg missing" are in reference to the same thing, as are the bigrams "ecma docs" and "emergency documents." This is incredibly interesting, because, if I were a parent, one of my chief concerns would be whether the people responsible for watching my child were prepared in the event of an emergency. I mean, if my child took medication, and the facility didn't have an emergency bag or the proper emergency medical documentation, what would happen in the event of an evacuation? That being said, the other bigrams — things like "cleaning products" and "outlet covers" — are pretty interesting too. It's kind of a no-brainer to keep cleaning products out of reach and make sure all outlets are covered, so it's pretty concerning that these are common issues at childcare facilities.

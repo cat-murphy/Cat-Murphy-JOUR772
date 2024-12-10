@@ -611,7 +611,7 @@ md24_senate <- md24_senate_raw |>
   mutate(
     write_ins_senate = patrick_j_burke_write_in_other_candidates + billy_bridges_write_in_unaffiliated + irwin_william_gibbs_write_in_unaffiliated + christy_renee_helmondollar_write_in_unaffiliated + robin_rowe_write_in_unaffiliated + other_write_ins)
 
-# deselect write in columns
+# deselect individual write in columns
 md24_senate <- md24_senate |>
   select(-patrick_j_burke_write_in_other_candidates, -billy_bridges_write_in_unaffiliated, -irwin_william_gibbs_write_in_unaffiliated, -christy_renee_helmondollar_write_in_unaffiliated, -robin_rowe_write_in_unaffiliated, -other_write_ins)
 ```
@@ -619,14 +619,12 @@ md24_senate <- md24_senate |>
 ### Senate Calculations
 
 ```{r}
-# calculate percentages by county
+# calculate % by county
 md24_senate <- md24_senate |>
   mutate(
     total_votes_senate = alsobrooks + hogan + third_party_senate + write_ins_senate,
     pct_alsobrooks = alsobrooks/total_votes_senate*100,
-    pct_hogan = hogan/total_votes_senate*100,
-    pct_third_party_senate = third_party_senate/total_votes_senate*100,
-    pct_write_ins_senate = write_ins_senate/total_votes_senate*100
+    pct_hogan = hogan/total_votes_senate*100
   )
 ```
 
@@ -636,6 +634,10 @@ md24_senate <- md24_senate |>
 # join senate data with presidential data
 senate_comparison <- md24 |>
   left_join(md24_senate, join_by(county))
+
+# deselect third party and write in columns for simplicity
+senate_comparison <- senate_comparison |>
+  select(-third_party24, -third_party_senate, -write_ins24, -write_ins_senate, -pct_third_party24, -pct_write_ins24)
 ```
 
 ### County Calculations: Senate vs. Presidential
@@ -650,18 +652,13 @@ senate_comparison <- senate_comparison |>
 senate_comparison <- senate_comparison |>
   mutate(
     diff_trump_hogan = trump_vance24-hogan,
-    diff_harris_alsobrooks = harris_walz24-alsobrooks,
-    diff_third_party = third_party24-third_party_senate,
-    diff_write_ins = write_ins24-write_ins_senate)
+    diff_harris_alsobrooks = harris_walz24-alsobrooks)
 
 # calculate difference in % of voters
 senate_comparison <- senate_comparison |>
   mutate(
     diff_pct_trump_hogan = pct_trump_vance24-pct_hogan,
-    diff_pct_harris_alsobrooks = pct_harris_walz24-pct_alsobrooks,
-    diff_pct_third_party = pct_third_party24-pct_third_party_senate,
-    diff_pct_write_ins = pct_write_ins24-pct_write_ins_senate
-  )
+    diff_pct_harris_alsobrooks = pct_harris_walz24-pct_alsobrooks)
 
 senate_comparison |>
   select(pct_harris_walz24, pct_alsobrooks, pct_trump_vance24, pct_hogan)
@@ -726,3 +723,15 @@ sum(senate_comparison$alsobrooks)/sum(senate_comparison$total_votes_senate)*100
     # answer (rounded): 7.54 percentage points
 
 ```
+
+### Answers, Issues & Notable Findings
+
+```{r}
+# ANSWERS, ISSUES & NOTABLE FINDINGS:
+
+    # 
+```
+
+## Q5
+
+*Question: How did Maryland’s abortion ballot measure do compared to other states? How did different counties vote on the measure?*

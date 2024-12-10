@@ -453,7 +453,7 @@ sum(md24_md20$trump_pence20)/sum(md24_md20$total_votes20)*100
 
         # Trump won 34.54% of the vote statewide
   
-        # Harris won 62.18% of the vote statewide 48.4%
+        # Harris won 62.18% of the vote statewide
   
     # How did they perform in each county? 
 
@@ -641,10 +641,18 @@ senate_comparison <- md24 |>
 ### County Calculations: Senate vs. Presidential
 
 ```{r}
-# calculate difference in number of voters
+# calculate difference in number of votes per county
 senate_comparison <- senate_comparison |>
   mutate(
-    diff_total_voters = total_votes24-total_votes_senate)
+    diff_total_votes = total_votes24-total_votes_senate)
+
+# calculate difference in number of voters per candidate 
+senate_comparison <- senate_comparison |>
+  mutate(
+    diff_trump_hogan = trump_vance24-hogan,
+    diff_harris_alsobrooks = harris_walz24-alsobrooks,
+    diff_third_party = third_party24-third_party_senate,
+    diff_write_ins = write_ins24-write_ins_senate)
 
 # calculate difference in % of voters
 senate_comparison <- senate_comparison |>
@@ -662,5 +670,59 @@ senate_comparison |>
 ### Statewide Calculations: Senate vs. Presidential
 
 ```{r}
+# calculate total votes in presidential race
+sum(senate_comparison$total_votes24)
+
+    # answer: 2,943,288
+
+# calculate total votes in senate race
+sum(senate_comparison$total_votes_senate)
+
+    # answer: 3,021,378
+
+# calculate difference in total votes
+sum(senate_comparison$total_votes24)-sum(senate_comparison$total_votes_senate)
+
+    # answer: -78,090
+
+# calculate difference in number of votes per candidate — trump vs. hogan
+sum(senate_comparison$trump_vance24)-sum(senate_comparison$hogan)
+
+    # answer: -277,730
+
+# calculate difference in number of votes per candidate — harris vs. alsobrooks
+sum(senate_comparison$harris_walz24)-sum(senate_comparison$alsobrooks)
+
+    # answer: 179,341
+
+# recalculate (for ease) pct of votes per candidate — trump
+sum(senate_comparison$trump_vance24)/sum(senate_comparison$total_votes24)*100
+
+    # answer (rounded): 34.54%
+
+# recalculate (for ease) pct of votes per candidate — harris
+sum(senate_comparison$harris_walz24)/sum(senate_comparison$total_votes24)*100
+
+    # answer (rounded): 62.18%
+
+# calculate pct of votes per candidate — hogan
+sum(senate_comparison$hogan)/sum(senate_comparison$total_votes_senate)*100
+
+    # answer (rounded): 42.84%
+
+# calculate pct of votes per candidate — alsobrooks
+sum(senate_comparison$alsobrooks)/sum(senate_comparison$total_votes_senate)*100
+
+    # answer (rounded): 54.64%
+
+# calculate difference in pct of votes per candidate — trump vs. hogan
+(sum(senate_comparison$trump_vance24)/sum(senate_comparison$total_votes24)*100)-(sum(senate_comparison$hogan)/sum(senate_comparison$total_votes_senate)*100)
+
+    # answer (rounded): -8.29 percentage points
+
+# calculate difference in pct of votes per candidate — harris vs. alsobrooks
+(sum(senate_comparison$harris_walz24)/sum(senate_comparison$total_votes24)*100)-(sum(senate_comparison$alsobrooks)/sum(senate_comparison$total_votes_senate)*100)
+
+    # answer (rounded): 7.54 percentage points
 
 ```

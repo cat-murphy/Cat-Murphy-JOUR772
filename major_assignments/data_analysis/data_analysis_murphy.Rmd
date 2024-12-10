@@ -481,3 +481,186 @@ sum(md24_md20$trump_pence20)/sum(md24_md20$total_votes20)*100
 
         # Harris won 48.4% of the vote nationally, meaning she overperformed in MD by about 14 points
 ```
+
+## Q3
+
+*Question: How many Maryland voters voted for a third-party candidate or cast a write-in ballot? What were the county trends? How did this compare to 2020?*
+
+### Joining
+
+```{r}
+# join md20 and md24 data sets
+third_party_comparison <- md20 |>
+  left_join(md24, join_by(county))
+
+# select third party and write-in columns
+third_party_comparison <- third_party_comparison |>
+  select(county, write_ins20, pct_write_ins20, write_ins24, pct_write_ins24, third_party20, pct_third_party20, third_party24, pct_third_party24, total_votes20, total_votes24)
+```
+
+### County Calculations
+
+```{r}
+# county calculations
+third_party_comparison <- third_party_comparison |>
+mutate(
+    write_in_diff=pct_write_ins24-pct_write_ins20,
+    third_party_diff=pct_third_party24-pct_third_party20
+  )
+```
+
+### Statewide Calculations
+
+```{r}
+# statewide calculations — third party
+
+# caclulate statewide third-party vote in 2020
+sum(third_party_comparison$third_party20)
+
+    # answer: 55,171
+
+# caclulate statewide third-party vote as a pct of all votes cast in 2020
+sum(third_party_comparison$third_party20)/sum(third_party_comparison$total_votes20)*100
+
+    # answer (rounded): 1.82%
+
+# caclulate statewide third-party vote in 2024
+sum(third_party_comparison$third_party24)
+
+    # answer: 74,443
+
+# caclulate statewide third-party vote as a pct of all votes cast in 2024
+sum(third_party_comparison$third_party24)/sum(third_party_comparison$total_votes24)*100
+
+    # answer (rounded): 2.53%
+
+# calculate difference in number of third party votes
+sum(third_party_comparison$third_party24)-sum(third_party_comparison$third_party20)
+
+    # answer: 19,272
+
+# calculate difference in pct of third party votes
+(sum(third_party_comparison$third_party24)/sum(third_party_comparison$total_votes24)*100)-(sum(third_party_comparison$third_party20)/sum(third_party_comparison$total_votes20)*100)
+
+    # answer (rounded): 0.71 percentage points
+```
+
+```{r}
+# statewide calculations — write-ins
+
+# caclulate statewide write-in vote in 2020
+sum(third_party_comparison$write_ins20)
+
+    # answer: 20,422
+
+# caclulate statewide write-in vote as a pct of all votes cast in 2020
+sum(third_party_comparison$write_ins20)/sum(third_party_comparison$total_votes20)*100
+
+    # answer (rounded): 0.67%
+
+# caclulate statewide write-in vote in 2024
+sum(third_party_comparison$write_ins24)
+
+    # answer: 21,978
+
+# caclulate statewide write-in vote as a pct of all votes cast in 2024
+sum(third_party_comparison$write_ins24)/sum(third_party_comparison$total_votes24)*100
+
+    # answer (rounded): 0.75%
+
+# calculate difference in number of write-in votes
+sum(third_party_comparison$write_ins24)-sum(third_party_comparison$write_ins20)
+
+    # answer: 1,556
+
+# calculate difference in pct of write-in votes
+(sum(third_party_comparison$write_ins24)/sum(third_party_comparison$total_votes24)*100)-(sum(third_party_comparison$write_ins20)/sum(third_party_comparison$total_votes20)*100)
+
+    # answer (rounded): 0.074 percentage points
+```
+
+### Answers, Issues & Notable Findings
+
+```{r}
+# ANSWERS, ISSUES & NOTABLE FINDINGS:
+
+    # 
+```
+
+## Q4
+
+*Question: How did the MD Senate candidates compare to their national party presidential nominees? What were the county trends?*
+
+### Loading & Cleaning
+
+```{r}
+# load & clean md senate data
+md24_senate_raw <- read_csv("data/md_senate_2024.csv") |>
+  clean_names()
+
+# rename columns & combine write ins
+md24_senate <- md24_senate_raw |>
+  rename(
+    county = jurisdiction,
+    alsobrooks = angela_alsobrooks_democratic,
+    hogan = larry_hogan_republican,
+    third_party_senate = mike_scott_libertarian) |>
+  mutate(
+    county=gsub('Saint Mary\'s', 'St. Mary\'s', county)
+  ) |>
+  mutate(
+    write_ins_senate = patrick_j_burke_write_in_other_candidates + billy_bridges_write_in_unaffiliated + irwin_william_gibbs_write_in_unaffiliated + christy_renee_helmondollar_write_in_unaffiliated + robin_rowe_write_in_unaffiliated + other_write_ins)
+
+# deselect write in columns
+md24_senate <- md24_senate |>
+  select(-patrick_j_burke_write_in_other_candidates, -billy_bridges_write_in_unaffiliated, -irwin_william_gibbs_write_in_unaffiliated, -christy_renee_helmondollar_write_in_unaffiliated, -robin_rowe_write_in_unaffiliated, -other_write_ins)
+```
+
+### Senate Calculations
+
+```{r}
+# calculate percentages by county
+md24_senate <- md24_senate |>
+  mutate(
+    total_votes_senate = alsobrooks + hogan + third_party_senate + write_ins_senate,
+    pct_alsobrooks = alsobrooks/total_votes_senate*100,
+    pct_hogan = hogan/total_votes_senate*100,
+    pct_third_party_senate = third_party_senate/total_votes_senate*100,
+    pct_write_ins_senate = write_ins_senate/total_votes_senate*100
+  )
+```
+
+### Joining
+
+```{r}
+# join senate data with presidential data
+senate_comparison <- md24 |>
+  left_join(md24_senate, join_by(county))
+```
+
+### County Calculations: Senate vs. Presidential
+
+```{r}
+# calculate difference in number of voters
+senate_comparison <- senate_comparison |>
+  mutate(
+    diff_total_voters = total_votes24-total_votes_senate)
+
+# calculate difference in % of voters
+senate_comparison <- senate_comparison |>
+  mutate(
+    diff_pct_trump_hogan = pct_trump_vance24-pct_hogan,
+    diff_pct_harris_alsobrooks = pct_harris_walz24-pct_alsobrooks,
+    diff_pct_third_party = pct_third_party24-pct_third_party_senate,
+    diff_pct_write_ins = pct_write_ins24-pct_write_ins_senate
+  )
+
+senate_comparison |>
+  select(pct_harris_walz24, pct_alsobrooks, pct_trump_vance24, pct_hogan)
+```
+
+### Statewide Calculations: Senate vs. Presidential
+
+```{r}
+
+```

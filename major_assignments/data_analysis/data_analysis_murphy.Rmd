@@ -16,6 +16,8 @@ library(tigris)
 
 # Data Analysis Project
 
+Link to memo: <https://docs.google.com/document/d/1-DfjY-jJvDedNdl-PNohr5gP9UCz-_G7UZ-kErY5fSs/edit?usp=sharing>
+
 ## Maryland 2024 Election Data
 
 ```{r}

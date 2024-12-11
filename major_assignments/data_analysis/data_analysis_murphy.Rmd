@@ -609,7 +609,7 @@ sum(third_party_comparison$write_ins24)-sum(third_party_comparison$write_ins20)
 
 ## Q4
 
-*Question: How did the MD Senate candidates compare to their national party presidential nominees? What were the county trends?*
+*Question: How did the Maryland Senate candidates do in comparison to the national party nominees? What were the county trends?*
 
 ### Loading & Cleaning
 
@@ -733,9 +733,17 @@ sum(senate_comparison$alsobrooks)/sum(senate_comparison$total_votes_senate)*100
 ```{r}
 # ANSWERS, ISSUES & NOTABLE FINDINGS:
 
-    # How did the MD Senate candidates compare to their national party presidential nominees? 
+    # How did Hogan and Alsobrooks do in comparison to Trump and Harris? 
 
-        # 
+        # First, 78,090 more people voted in the Senate race than did in the presidential race, meaning that a number of people must have left the top of the ticket blank. 
+
+        # Trump performed noticeably worse (-8.29 points) than Hogan: where Trump only received 34.54% of the vote, Hogan received 42.84%.
+
+        # Likewise, while Alsobrooks won the Maryland Senate seat safely, Harris still outperformed her by 7.54 points: Alsobrooks only received 54.64% of the vote, compared to Harris' 62.18%.
+
+        # This suggests that a not insignificant number of people voted for both Hogan and Harris. The prevalence of split-ticket voting
+
+        # Because Harris' 7.54-point lead on Alsobrooks does not fully account for 
 
     # What were the county trends?
 

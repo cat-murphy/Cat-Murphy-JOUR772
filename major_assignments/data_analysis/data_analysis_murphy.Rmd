@@ -176,7 +176,7 @@ md_population22 <- md_population22_raw |>
 
 *Question: How many registered voters were there in Maryland in 2024? What percentage of voting-age people are registered to vote? What percentage of them voted in 2024? How did this compare to 2020? How did this compare by county? How did this compare nationally?*
 
-### Standardizing 
+### Standardizing
 
 ```{r}
 # standardizing data spellings
@@ -282,7 +282,7 @@ md20_md24_combined <- md20_md24_combined |>
   )
 ```
 
-### Statewide Calculations 
+### Statewide Calculations
 
 ```{r}
 # calculate statewide figures
@@ -648,13 +648,7 @@ senate_comparison <- senate_comparison |>
   mutate(
     diff_total_votes = total_votes24-total_votes_senate)
 
-# calculate difference in number of voters per candidate 
-senate_comparison <- senate_comparison |>
-  mutate(
-    diff_trump_hogan = trump_vance24-hogan,
-    diff_harris_alsobrooks = harris_walz24-alsobrooks)
-
-# calculate difference in % of voters
+# calculate difference in % of votes by party
 senate_comparison <- senate_comparison |>
   mutate(
     diff_pct_trump_hogan = pct_trump_vance24-pct_hogan,
@@ -681,16 +675,6 @@ sum(senate_comparison$total_votes_senate)
 sum(senate_comparison$total_votes24)-sum(senate_comparison$total_votes_senate)
 
     # answer: -78,090
-
-# calculate difference in number of votes per candidate — trump vs. hogan
-sum(senate_comparison$trump_vance24)-sum(senate_comparison$hogan)
-
-    # answer: -277,730
-
-# calculate difference in number of votes per candidate — harris vs. alsobrooks
-sum(senate_comparison$harris_walz24)-sum(senate_comparison$alsobrooks)
-
-    # answer: 179,341
 
 # recalculate (for ease) pct of votes per candidate — trump
 sum(senate_comparison$trump_vance24)/sum(senate_comparison$total_votes24)*100
@@ -747,6 +731,8 @@ abortion_measures <- read_csv("data/abortion_ballot_measures.csv") |>
 md_question_1 <- read_csv("data/md_question_1.csv") |>
   clean_names() |>
   rename(county = jurisdiction) |>
+  rename(voted_yes_q1 = "for") |>
+  rename(voted_no_q1 = against) |>
   mutate(
     county=gsub('Saint Mary\'s', 'St. Mary\'s', county)
   )
@@ -758,14 +744,92 @@ md_question_1 <- read_csv("data/md_question_1.csv") |>
 # calculate yes/no percentages
 abortion_measures <- abortion_measures |>
   mutate(
-    total_votes_measure = voted_yes + voted_no,
-    pct_voted_yes = voted_yes/total_votes_measure*100,
-    pct_voted_no = voted_no/total_votes_measure*100
+    total_votes = voted_yes + voted_no,
+    pct_voted_yes = voted_yes/total_votes*100,
+    pct_voted_no = voted_no/total_votes*100
   )
 ```
 
-### Maryland Calculations
+### Maryland County Calculations
 
 ```{r}
+# calculate yes/no percentages by county
+md_question_1 <- md_question_1 |>
+  mutate(
+    total_votes_q1 = voted_yes_q1 + voted_no_q1,
+    pct_voted_yes_q1 = voted_yes_q1/total_votes_q1*100,
+    pct_voted_no_q1 = voted_no_q1/total_votes_q1*100
+  )
+```
 
+```{r}
+# join data & deselect irrelevant info
+md_abortion_joined <- md24 |>
+  left_join(md_question_1, join_by(county)) |>
+  select(-write_ins24, -third_party24, -pct_third_party24, -pct_write_ins24)
+
+# calculate difference between total votes
+md_abortion_joined <- md_abortion_joined |>
+  mutate(
+    diff_total_votes = total_votes24-total_votes_q1
+  )
+
+# compare pct of votes for/against q1 to pct of votes for candidates by party
+md_abortion_joined <- md_abortion_joined |>
+  mutate(
+    diff_pct_yes_q1_harris = pct_voted_yes_q1-pct_harris_walz24,
+    diff_pct_no_q1_trump = pct_voted_no_q1-pct_trump_vance24
+  )
+```
+
+### Maryland Statewide Calculations
+
+```{r}
+# recalculate (for ease) total number of votes on q1
+sum(md_abortion_joined$total_votes_q1)
+
+    # answer: 2,891,538
+
+# recalculate (for ease) total number of votes in presidential race
+sum(md_abortion_joined$total_votes24)
+
+    # answer: 2,943,288
+
+# recalculate (for my own curiosity's sake) total number of votes in senate race
+sum(senate_comparison$total_votes_senate)
+
+    # answer: 3,021,378
+
+# calculate difference between votes for president and votes on q1
+sum(md_abortion_joined$total_votes24)-sum(md_abortion_joined$total_votes_q1)
+
+    # answer: 51,750
+
+# recalculate (for ease) overall pct of votes for q1
+sum(md_abortion_joined$voted_yes_q1)/sum(md_abortion_joined$total_votes_q1)*100
+
+    # answers (rounded): 76.06%
+
+# recalculate (for ease) overall pct of votes against q1
+sum(md_abortion_joined$voted_no_q1)/sum(md_abortion_joined$total_votes_q1)*100
+
+    # answers (rounded): 23.94%
+
+# calculate overall difference between pct of votes for q1 and pct of votes for harris
+(sum(md_abortion_joined$voted_yes_q1)/sum(md_abortion_joined$total_votes_q1)*100)-(sum(md_abortion_joined$harris_walz24)/sum(md_abortion_joined$total_votes24)*100)
+
+    # answer (rounded): 13.88 percentage points
+
+# calculate overall difference between pct of votes against q1 and pct of votes for trump
+(sum(md_abortion_joined$voted_no_q1)/sum(md_abortion_joined$total_votes_q1)*100)-(sum(md_abortion_joined$trump_vance24)/sum(md_abortion_joined$total_votes24)*100)
+
+    # answer (rounded): -10.60 percentage points
+```
+
+### Answers, Issues & Notable Findings
+
+```{r}
+# ANSWERS, ISSUES & NOTABLE FINDINGS:
+
+    # 
 ```

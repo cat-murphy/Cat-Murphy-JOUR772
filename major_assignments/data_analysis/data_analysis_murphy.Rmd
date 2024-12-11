@@ -734,4 +734,38 @@ sum(senate_comparison$alsobrooks)/sum(senate_comparison$total_votes_senate)*100
 
 ## Q5
 
-*Question: How did Maryland’s abortion ballot measure do compared to other states? How did different counties vote on the measure?*
+*Question: How did Maryland’s abortion ballot measure do in comparison to similar measures in other states? To the presidential candidates? How did different counties vote on the measure?*
+
+### Loading & Cleaning
+
+```{r}
+# load all abortion ballot measure data 
+abortion_measures <- read_csv("data/abortion_ballot_measures.csv") |>
+  clean_names()
+
+# load & clean maryland county-by-county abortion ballot measure data
+md_question_1 <- read_csv("data/md_question_1.csv") |>
+  clean_names() |>
+  rename(county = jurisdiction) |>
+  mutate(
+    county=gsub('Saint Mary\'s', 'St. Mary\'s', county)
+  )
+```
+
+### National Calculations
+
+```{r}
+# calculate yes/no percentages
+abortion_measures <- abortion_measures |>
+  mutate(
+    total_votes_measure = voted_yes + voted_no,
+    pct_voted_yes = voted_yes/total_votes_measure*100,
+    pct_voted_no = voted_no/total_votes_measure*100
+  )
+```
+
+### Maryland Calculations
+
+```{r}
+
+```

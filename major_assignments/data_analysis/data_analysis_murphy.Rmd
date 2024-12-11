@@ -484,7 +484,7 @@ sum(md24_md20$trump_pence20)/sum(md24_md20$total_votes20)*100
 
 ## Q3
 
-*Question: How many Maryland voters voted for a third-party candidate or cast a write-in ballot? What were the county trends? How did this compare to 2020?*
+*Question: How many Maryland voters voted for a third-party candidate or cast a write-in ballot? How did this compare to 2020? What were the county trends?*
 
 ### Joining
 
@@ -584,7 +584,27 @@ sum(third_party_comparison$write_ins24)-sum(third_party_comparison$write_ins20)
 ```{r}
 # ANSWERS, ISSUES & NOTABLE FINDINGS:
 
-    # 
+    # How many Maryland voters voted for a third-party candidate or cast a write-in ballot?
+
+        # 74,443 people (2.53% of all voters) voted for a third-party candidate
+
+        # 21,978 people (0.75% of all voters) cast a write-in ballot
+
+    # How did this compare to 2020?
+        
+        # In 2020, only 55,171 (1.82%) voted for third-party candidates, and 20,422 (0.67%) cast write-in ballots
+
+        # This shows that there was a meaningful (0.71 percentage point) increase in third-party voting in 2024, meaning the third-party vote share increased by 40% between 2020 and 2024
+
+        # Meanwhile, the percentage of write-in votes shifted only slightly
+
+        # This seems to correspond with all the reporting that has pointed to general frustration with the two major candidates and the two-party system more broadly
+
+    # What were the county trends?
+
+        # The county-by-county breakdown shows almost unequivocally that the increase in third-party voting was sweeping. Not only did the percentage of third-party votes increase in every single county, the percentage range shifted from 1.35%-2.73% in 2020 to 1.85%-3.46% in 2024.
+
+        # In Howard County, the vote share that third-party candidates received increased by more than double between 2020 and 2024, from 1.91% to 3.46%. The later vote share is two-thirds of a percentage point higher than the county with the next-highest third-party vote share. What's going on in Howard County that turned voters off to the major party candidates?
 ```
 
 ## Q4
@@ -713,7 +733,13 @@ sum(senate_comparison$alsobrooks)/sum(senate_comparison$total_votes_senate)*100
 ```{r}
 # ANSWERS, ISSUES & NOTABLE FINDINGS:
 
-    # 
+    # How did the MD Senate candidates compare to their national party presidential nominees? 
+
+        # 
+
+    # What were the county trends?
+
+        # 
 ```
 
 ## Q5
@@ -831,5 +857,15 @@ sum(md_abortion_joined$voted_no_q1)/sum(md_abortion_joined$total_votes_q1)*100
 ```{r}
 # ANSWERS, ISSUES & NOTABLE FINDINGS:
 
-    # 
+    # How did Maryland’s abortion ballot measure do in comparison to similar measures in other states? 
+
+        #
+
+    # To the presidential candidates? 
+
+        #
+
+    # How did different counties vote on the measure?
+
+        #
 ```

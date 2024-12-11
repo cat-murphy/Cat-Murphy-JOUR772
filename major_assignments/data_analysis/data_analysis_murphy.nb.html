@@ -1756,12 +1756,40 @@ display: none;
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShqYW5pdG9yKSBcbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeSh0aWR5Y2Vuc3VzKVxubGlicmFyeSh0aWdyaXMpXG5gYGAifQ== -->
-<pre class="r"><code>library(janitor) 
-library(tidyverse)
-library(tidycensus)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShqYW5pdG9yKSBcbmBgYCJ9 -->
+<pre class="r"><code>library(janitor) </code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYamFuaXRvcuKAmVxuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6c3RhdHPigJk6XG5cbiAgICBjaGlzcS50ZXN0LCBmaXNoZXIudGVzdFxuIn0= -->
+<pre><code>
+Attaching package: ‘janitor’
+
+The following objects are masked from ‘package:stats’:
+
+    chisq.test, fisher.test</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5gYGAifQ== -->
+<pre class="r"><code>library(tidyverse)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoi4pSA4pSAIEF0dGFjaGluZyBjb3JlIHRpZHl2ZXJzZSBwYWNrYWdlcyDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIAgdGlkeXZlcnNlIDIuMC4wIOKUgOKUgFxu4pyUIGRwbHlyICAgICAxLjEuNCAgICAg4pyUIHJlYWRyICAgICAyLjEuNVxu4pyUIGZvcmNhdHMgICAxLjAuMCAgICAg4pyUIHN0cmluZ3IgICAxLjUuMVxu4pyUIGdncGxvdDIgICAzLjUuMSAgICAg4pyUIHRpYmJsZSAgICAzLjIuMVxu4pyUIGx1YnJpZGF0ZSAxLjkuMyAgICAg4pyUIHRpZHlyICAgICAxLjMuMVxu4pyUIHB1cnJyICAgICAxLjAuMiAgICAgXG7ilIDilIAgQ29uZmxpY3RzIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCB0aWR5dmVyc2VfY29uZmxpY3RzKCkg4pSA4pSAXG7inJYgZHBseXI6OmZpbHRlcigpIG1hc2tzIHN0YXRzOjpmaWx0ZXIoKVxu4pyWIGRwbHlyOjpsYWcoKSAgICBtYXNrcyBzdGF0czo6bGFnKClcbuKEuSBVc2UgdGhlIFx1MDAxYl04OztodHRwOi8vY29uZmxpY3RlZC5yLWxpYi5vcmcvXHUwMDA3Y29uZmxpY3RlZCBwYWNrYWdlXHUwMDFiXTg7O1x1MDAwNyB0byBmb3JjZSBhbGwgY29uZmxpY3RzIHRvIGJlY29tZSBlcnJvcnNcbiJ9 -->
+<pre><code>── Attaching core tidyverse packages ────────────────────────────────────────────────────────────────────────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ──────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the ]8;;http://conflicted.r-lib.org/conflicted package]8;; to force all conflicts to become errors</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5Y2Vuc3VzKVxubGlicmFyeSh0aWdyaXMpXG5gYGAifQ== -->
+<pre class="r"><code>library(tidycensus)
 library(tigris)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiVG8gZW5hYmxlIGNhY2hpbmcgb2YgZGF0YSwgc2V0IGBvcHRpb25zKHRpZ3Jpc191c2VfY2FjaGUgPSBUUlVFKWBcbmluIHlvdXIgUiBzY3JpcHQgb3IgLlJwcm9maWxlLlxuIn0= -->
+<pre><code>To enable caching of data, set `options(tigris_use_cache = TRUE)`
+in your R script or .Rprofile.</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <div id="data-analysis-project" class="section level1">
@@ -2740,7 +2768,22 @@ candidates? How did different counties vote on the measure?</em></p>
 <h3>Loading &amp; Cleaning</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBsb2FkICYgY2xlYW4gbWFyeWxhbmQgY291bnR5LWJ5LWNvdW50eSBhYm9ydGlvbiBiYWxsb3QgbWVhc3VyZSBkYXRhXG5tZF9xdWVzdGlvbl8xIDwtIHJlYWRfY3N2KFwiZGF0YS9tZF9xdWVzdGlvbl8xLmNzdlwiKSB8PlxuICBjbGVhbl9uYW1lcygpIHw+XG4gIHJlbmFtZShjb3VudHkgPSBqdXJpc2RpY3Rpb24pIHw+XG4gIHJlbmFtZSh2b3RlZF95ZXNfcTEgPSBcImZvclwiKSB8PlxuICByZW5hbWUodm90ZWRfbm9fcTEgPSBhZ2FpbnN0KSB8PlxuICBtdXRhdGUoXG4gICAgY291bnR5PWdzdWIoJ1NhaW50IE1hcnlcXCdzJywgJ1N0LiBNYXJ5XFwncycsIGNvdW50eSlcbiAgKVxuXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBsb2FkIGFsbCBhYm9ydGlvbiBiYWxsb3QgbWVhc3VyZSBkYXRhIFxuYWJvcnRpb25fbWVhc3VyZXMgPC0gcmVhZF9jc3YoXCJkYXRhL2Fib3J0aW9uX2JhbGxvdF9tZWFzdXJlcy5jc3ZcIikgfD5cbiAgY2xlYW5fbmFtZXMoKVxuYGBgIn0= -->
+<pre class="r"><code># load all abortion ballot measure data 
+abortion_measures &lt;- read_csv(&quot;data/abortion_ballot_measures.csv&quot;) |&gt;
+  clean_names()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUm93czogMTEgQ29sdW1uczogNFxu4pSA4pSAIENvbHVtbiBzcGVjaWZpY2F0aW9uIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgFxuRGVsaW1pdGVyOiBcIixcIlxuY2hyICgyKTogU1RBVEUsIFJFU1VMVFxubnVtICgyKTogVk9URUQgWUVTLCBWT1RFRCBOT1xuXG7ihLkgVXNlIGBzcGVjKClgIHRvIHJldHJpZXZlIHRoZSBmdWxsIGNvbHVtbiBzcGVjaWZpY2F0aW9uIGZvciB0aGlzIGRhdGEuXG7ihLkgU3BlY2lmeSB0aGUgY29sdW1uIHR5cGVzIG9yIHNldCBgc2hvd19jb2xfdHlwZXMgPSBGQUxTRWAgdG8gcXVpZXQgdGhpcyBtZXNzYWdlLlxuIn0= -->
+<pre><code>Rows: 11 Columns: 4
+── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: &quot;,&quot;
+chr (2): STATE, RESULT
+num (2): VOTED YES, VOTED NO
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBsb2FkICYgY2xlYW4gbWFyeWxhbmQgY291bnR5LWJ5LWNvdW50eSBhYm9ydGlvbiBiYWxsb3QgbWVhc3VyZSBkYXRhXG5tZF9xdWVzdGlvbl8xIDwtIHJlYWRfY3N2KFwiZGF0YS9tZF9xdWVzdGlvbl8xLmNzdlwiKSB8PlxuICBjbGVhbl9uYW1lcygpIHw+XG4gIHJlbmFtZShjb3VudHkgPSBqdXJpc2RpY3Rpb24pIHw+XG4gIHJlbmFtZSh2b3RlZF95ZXNfcTEgPSBcImZvclwiKSB8PlxuICByZW5hbWUodm90ZWRfbm9fcTEgPSBhZ2FpbnN0KSB8PlxuICBtdXRhdGUoXG4gICAgY291bnR5PWdzdWIoJ1NhaW50IE1hcnlcXCdzJywgJ1N0LiBNYXJ5XFwncycsIGNvdW50eSlcbiAgKVxuYGBgIn0= -->
 <pre class="r"><code># load &amp; clean maryland county-by-county abortion ballot measure data
 md_question_1 &lt;- read_csv(&quot;data/md_question_1.csv&quot;) |&gt;
   clean_names() |&gt;
@@ -2749,8 +2792,7 @@ md_question_1 &lt;- read_csv(&quot;data/md_question_1.csv&quot;) |&gt;
   rename(voted_no_q1 = against) |&gt;
   mutate(
     county=gsub(&#39;Saint Mary\&#39;s&#39;, &#39;St. Mary\&#39;s&#39;, county)
-  )
-</code></pre>
+  )</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiUm93czogMjQgQ29sdW1uczogM1xu4pSA4pSAIENvbHVtbiBzcGVjaWZpY2F0aW9uIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgFxuRGVsaW1pdGVyOiBcIixcIlxuY2hyICgxKTogSnVyaXNkaWN0aW9uXG5udW0gKDIpOiBGb3IsIEFnYWluc3Rcblxu4oS5IFVzZSBgc3BlYygpYCB0byByZXRyaWV2ZSB0aGUgZnVsbCBjb2x1bW4gc3BlY2lmaWNhdGlvbiBmb3IgdGhpcyBkYXRhLlxu4oS5IFNwZWNpZnkgdGhlIGNvbHVtbiB0eXBlcyBvciBzZXQgYHNob3dfY29sX3R5cGVzID0gRkFMU0VgIHRvIHF1aWV0IHRoaXMgbWVzc2FnZS5cbiJ9 -->
 <pre><code>Rows: 24 Columns: 3
@@ -2769,29 +2811,15 @@ num (2): For, Against
 <h3>National Calculations</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjYWxjdWxhdGUgeWVzL25vIHBlcmNlbnRhZ2VzXG5hYm9ydGlvbl9tZWFzdXJlcyA8LSBhYm9ydGlvbl9tZWFzdXJlcyB8PlxuICBtdXRhdGUoXG4gICAgdG90YWxfdm90ZXMgPSB2b3RlZF95ZXMgKyB2b3RlZF9ubyxcbiAgICBwY3Rfdm90ZWRfeWVzID0gdm90ZWRfeWVzL3RvdGFsX3ZvdGVzX21lYXN1cmUqMTAwLFxuICAgIHBjdF92b3RlZF9ubyA9IHZvdGVkX25vL3RvdGFsX3ZvdGVzX21lYXN1cmUqMTAwXG4gIClcblxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjYWxjdWxhdGUgeWVzL25vIHBlcmNlbnRhZ2VzXG5hYm9ydGlvbl9tZWFzdXJlcyA8LSBhYm9ydGlvbl9tZWFzdXJlcyB8PlxuICBtdXRhdGUoXG4gICAgdG90YWxfdm90ZXMgPSB2b3RlZF95ZXMgKyB2b3RlZF9ubyxcbiAgICBwY3Rfdm90ZWRfeWVzID0gdm90ZWRfeWVzL3RvdGFsX3ZvdGVzKjEwMCxcbiAgICBwY3Rfdm90ZWRfbm8gPSB2b3RlZF9uby90b3RhbF92b3RlcyoxMDBcbiAgKVxuYGBgIn0= -->
 <pre class="r"><code># calculate yes/no percentages
 abortion_measures &lt;- abortion_measures |&gt;
   mutate(
     total_votes = voted_yes + voted_no,
-    pct_voted_yes = voted_yes/total_votes_measure*100,
-    pct_voted_no = voted_no/total_votes_measure*100
-  )
-</code></pre>
+    pct_voted_yes = voted_yes/total_votes*100,
+    pct_voted_no = voted_no/total_votes*100
+  )</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gYG11dGF0ZSgpYDpcbuKEuSBJbiBhcmd1bWVudDogYHBjdF92b3RlZF95ZXMgPSB2b3RlZF95ZXMvdG90YWxfdm90ZXNfbWVhc3VyZSAqIDEwMGAuXG5DYXVzZWQgYnkgZXJyb3I6XG4hIG9iamVjdCAndG90YWxfdm90ZXNfbWVhc3VyZScgbm90IGZvdW5kXG5CYWNrdHJhY2U6XG4gMS4gZHBseXI6Om11dGF0ZSguLi4pXG4gMi4gZHBseXI6OjptdXRhdGUuZGF0YS5mcmFtZSguLi4pXG4gMy4gZHBseXI6OjptdXRhdGVfY29scyguZGF0YSwgZHBseXJfcXVvc3VyZXMoLi4uKSwgYnkpXG4gNS4gZHBseXI6OjptdXRhdGVfY29sKGRvdHNbW2ldXSwgZGF0YSwgbWFzaywgbmV3X2NvbHVtbnMpXG4gNi4gbWFzayRldmFsX2FsbF9tdXRhdGUocXVvKVxuIDcuIGRwbHlyIChsb2NhbCkgZXZhbCgpXG4ifQ== -->
-<pre><code>Error in `mutate()`:
-ℹ In argument: `pct_voted_yes = voted_yes/total_votes_measure * 100`.
-Caused by error:
-! object &#39;total_votes_measure&#39; not found
-Backtrace:
- 1. dplyr::mutate(...)
- 2. dplyr:::mutate.data.frame(...)
- 3. dplyr:::mutate_cols(.data, dplyr_quosures(...), by)
- 5. dplyr:::mutate_col(dots[[i]], data, mask, new_columns)
- 6. mask$eval_all_mutate(quo)
- 7. dplyr (local) eval()</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -2799,29 +2827,15 @@ Backtrace:
 <h3>Maryland County Calculations</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjYWxjdWxhdGUgeWVzL25vIHBlcmNlbnRhZ2VzIGJ5IGNvdW50eVxubWRfcXVlc3Rpb25fMSA8LSBtZF9xdWVzdGlvbl8xIHw+XG4gIG11dGF0ZShcbiAgICB0b3RhbF92b3Rlc19xMSA9IHZvdGVkX3llcyArIHZvdGVkX25vLFxuICAgIHBjdF92b3RlZF95ZXNfcTEgPSB2b3RlZF95ZXNfcTEvdG90YWxfdm90ZXNfcTEqMTAwLFxuICAgIHBjdF92b3RlZF9ub19xMSA9IHZvdGVkX25vX3ExL3RvdGFsX3ZvdGVzX3ExKjEwMFxuICApXG5cbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjYWxjdWxhdGUgeWVzL25vIHBlcmNlbnRhZ2VzIGJ5IGNvdW50eVxubWRfcXVlc3Rpb25fMSA8LSBtZF9xdWVzdGlvbl8xIHw+XG4gIG11dGF0ZShcbiAgICB0b3RhbF92b3Rlc19xMSA9IHZvdGVkX3llc19xMSArIHZvdGVkX25vX3ExLFxuICAgIHBjdF92b3RlZF95ZXNfcTEgPSB2b3RlZF95ZXNfcTEvdG90YWxfdm90ZXNfcTEqMTAwLFxuICAgIHBjdF92b3RlZF9ub19xMSA9IHZvdGVkX25vX3ExL3RvdGFsX3ZvdGVzX3ExKjEwMFxuICApXG5gYGAifQ== -->
 <pre class="r"><code># calculate yes/no percentages by county
 md_question_1 &lt;- md_question_1 |&gt;
   mutate(
-    total_votes_q1 = voted_yes + voted_no,
+    total_votes_q1 = voted_yes_q1 + voted_no_q1,
     pct_voted_yes_q1 = voted_yes_q1/total_votes_q1*100,
     pct_voted_no_q1 = voted_no_q1/total_votes_q1*100
-  )
-</code></pre>
+  )</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gYG11dGF0ZSgpYDpcbuKEuSBJbiBhcmd1bWVudDogYHRvdGFsX3ZvdGVzX3ExID0gdm90ZWRfeWVzICsgdm90ZWRfbm9gLlxuQ2F1c2VkIGJ5IGVycm9yOlxuISBvYmplY3QgJ3ZvdGVkX3llcycgbm90IGZvdW5kXG5CYWNrdHJhY2U6XG4gMS4gZHBseXI6Om11dGF0ZSguLi4pXG4gMi4gZHBseXI6OjptdXRhdGUuZGF0YS5mcmFtZSguLi4pXG4gMy4gZHBseXI6OjptdXRhdGVfY29scyguZGF0YSwgZHBseXJfcXVvc3VyZXMoLi4uKSwgYnkpXG4gNS4gZHBseXI6OjptdXRhdGVfY29sKGRvdHNbW2ldXSwgZGF0YSwgbWFzaywgbmV3X2NvbHVtbnMpXG4gNi4gbWFzayRldmFsX2FsbF9tdXRhdGUocXVvKVxuIDcuIGRwbHlyIChsb2NhbCkgZXZhbCgpXG4ifQ== -->
-<pre><code>Error in `mutate()`:
-ℹ In argument: `total_votes_q1 = voted_yes + voted_no`.
-Caused by error:
-! object &#39;voted_yes&#39; not found
-Backtrace:
- 1. dplyr::mutate(...)
- 2. dplyr:::mutate.data.frame(...)
- 3. dplyr:::mutate_cols(.data, dplyr_quosures(...), by)
- 5. dplyr:::mutate_col(dots[[i]], data, mask, new_columns)
- 6. mask$eval_all_mutate(quo)
- 7. dplyr (local) eval()</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -2852,14 +2866,79 @@ md_abortion_joined &lt;- md_abortion_joined |&gt;
 <h3>Maryland Statewide Calculations</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjYWxjdWxhdGUgb3ZlcmFsbCBkaWZmZXJlbmNlIGJldHdlZW4gcGN0IG9mIHZvdGVzIGFnYWluc3QgcTEgYW5kIHBjdCBvZiB2b3RlcyBmb3IgdHJ1bXBcbihzdW0obWRfYWJvcnRpb25fam9pbmVkJHZvdGVkX25vX3ExKS9zdW0obWRfYWJvcnRpb25fam9pbmVkJHRvdGFsX3ZvdGVzX3ExKSoxMDApLShzdW0obWRfYWJvcnRpb25fam9pbmVkJHRydW1wX3ZhbmNlMjQpL3N1bShtZF9hYm9ydGlvbl9qb2luZWQkdG90YWxfdm90ZXMyNCkqMTAwKVxuXG5gYGAifQ== -->
-<pre class="r"><code># calculate overall difference between pct of votes against q1 and pct of votes for trump
-(sum(md_abortion_joined$voted_no_q1)/sum(md_abortion_joined$total_votes_q1)*100)-(sum(md_abortion_joined$trump_vance24)/sum(md_abortion_joined$total_votes24)*100)
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyByZWNhbGN1bGF0ZSAoZm9yIGVhc2UpIHRvdGFsIG51bWJlciBvZiB2b3RlcyBvbiBxMVxuc3VtKG1kX2Fib3J0aW9uX2pvaW5lZCR0b3RhbF92b3Rlc19xMSlcbmBgYCJ9 -->
+<pre class="r"><code># recalculate (for ease) total number of votes on q1
+sum(md_abortion_joined$total_votes_q1)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDI4OTE1MzhcbiJ9 -->
+<pre><code>[1] 2891538</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuICAgICMgYW5zd2VyOiAyLDg5MSw1MzhcblxuIyByZWNhbGN1bGF0ZSAoZm9yIGVhc2UpIHRvdGFsIG51bWJlciBvZiB2b3RlcyBpbiBwcmVzaWRlbnRpYWwgcmFjZVxuc3VtKG1kX2Fib3J0aW9uX2pvaW5lZCR0b3RhbF92b3RlczI0KVxuYGBgIn0= -->
+<pre class="r"><code>    # answer: 2,891,538
+
+# recalculate (for ease) total number of votes in presidential race
+sum(md_abortion_joined$total_votes24)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDI5NDMyODhcbiJ9 -->
+<pre><code>[1] 2943288</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuICAgICMgYW5zd2VyOiAyLDk0MywyODhcblxuIyByZWNhbGN1bGF0ZSAoZm9yIG15IG93biBjdXJpb3NpdHkncyBzYWtlKSB0b3RhbCBudW1iZXIgb2Ygdm90ZXMgaW4gc2VuYXRlIHJhY2VcbnN1bShzZW5hdGVfY29tcGFyaXNvbiR0b3RhbF92b3Rlc19zZW5hdGUpXG5gYGAifQ== -->
+<pre class="r"><code>    # answer: 2,943,288
+
+# recalculate (for my own curiosity&#39;s sake) total number of votes in senate race
+sum(senate_comparison$total_votes_senate)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDMwMjEzNzhcbiJ9 -->
+<pre><code>[1] 3021378</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuICAgICMgYW5zd2VyOiAzLDAyMSwzNzhcblxuIyBjYWxjdWxhdGUgZGlmZmVyZW5jZSBiZXR3ZWVuIHZvdGVzIGZvciBwcmVzaWRlbnQgYW5kIHZvdGVzIG9uIHExXG5zdW0obWRfYWJvcnRpb25fam9pbmVkJHRvdGFsX3ZvdGVzMjQpLXN1bShtZF9hYm9ydGlvbl9qb2luZWQkdG90YWxfdm90ZXNfcTEpXG5gYGAifQ== -->
+<pre class="r"><code>    # answer: 3,021,378
+
+# calculate difference between votes for president and votes on q1
+sum(md_abortion_joined$total_votes24)-sum(md_abortion_joined$total_votes_q1)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDUxNzUwXG4ifQ== -->
+<pre><code>[1] 51750</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuICAgICMgYW5zd2VyOiA1MSw3NTBcblxuIyByZWNhbGN1bGF0ZSAoZm9yIGVhc2UpIG92ZXJhbGwgcGN0IG9mIHZvdGVzIGZvciBxMVxuc3VtKG1kX2Fib3J0aW9uX2pvaW5lZCR2b3RlZF95ZXNfcTEpL3N1bShtZF9hYm9ydGlvbl9qb2luZWQkdG90YWxfdm90ZXNfcTEpKjEwMFxuYGBgIn0= -->
+<pre class="r"><code>    # answer: 51,750
+
+# recalculate (for ease) overall pct of votes for q1
+sum(md_abortion_joined$voted_yes_q1)/sum(md_abortion_joined$total_votes_q1)*100</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDc2LjA2MDUzXG4ifQ== -->
+<pre><code>[1] 76.06053</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuICAgICMgYW5zd2VycyAocm91bmRlZCk6IDc2LjA2JVxuXG4jIHJlY2FsY3VsYXRlIChmb3IgZWFzZSkgb3ZlcmFsbCBwY3Qgb2Ygdm90ZXMgYWdhaW5zdCBxMVxuc3VtKG1kX2Fib3J0aW9uX2pvaW5lZCR2b3RlZF9ub19xMSkvc3VtKG1kX2Fib3J0aW9uX2pvaW5lZCR0b3RhbF92b3Rlc19xMSkqMTAwXG5gYGAifQ== -->
+<pre class="r"><code>    # answers (rounded): 76.06%
+
+# recalculate (for ease) overall pct of votes against q1
+sum(md_abortion_joined$voted_no_q1)/sum(md_abortion_joined$total_votes_q1)*100</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDIzLjkzOTQ3XG4ifQ== -->
+<pre><code>[1] 23.93947</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuICAgICMgYW5zd2VycyAocm91bmRlZCk6IDIzLjk0JVxuXG4jIGNhbGN1bGF0ZSBvdmVyYWxsIGRpZmZlcmVuY2UgYmV0d2VlbiBwY3Qgb2Ygdm90ZXMgZm9yIHExIGFuZCBwY3Qgb2Ygdm90ZXMgZm9yIGhhcnJpc1xuKHN1bShtZF9hYm9ydGlvbl9qb2luZWQkdm90ZWRfeWVzX3ExKS9zdW0obWRfYWJvcnRpb25fam9pbmVkJHRvdGFsX3ZvdGVzX3ExKSoxMDApLShzdW0obWRfYWJvcnRpb25fam9pbmVkJGhhcnJpc193YWx6MjQpL3N1bShtZF9hYm9ydGlvbl9qb2luZWQkdG90YWxfdm90ZXMyNCkqMTAwKVxuYGBgIn0= -->
+<pre class="r"><code>    # answers (rounded): 23.94%
+
+# calculate overall difference between pct of votes for q1 and pct of votes for harris
+(sum(md_abortion_joined$voted_yes_q1)/sum(md_abortion_joined$total_votes_q1)*100)-(sum(md_abortion_joined$harris_walz24)/sum(md_abortion_joined$total_votes24)*100)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEzLjg3NjU3XG4ifQ== -->
+<pre><code>[1] 13.87657</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuICAgICMgYW5zd2VyIChyb3VuZGVkKTogMTMuODggcGVyY2VudGFnZSBwb2ludHNcblxuIyBjYWxjdWxhdGUgb3ZlcmFsbCBkaWZmZXJlbmNlIGJldHdlZW4gcGN0IG9mIHZvdGVzIGFnYWluc3QgcTEgYW5kIHBjdCBvZiB2b3RlcyBmb3IgdHJ1bXBcbihzdW0obWRfYWJvcnRpb25fam9pbmVkJHZvdGVkX25vX3ExKS9zdW0obWRfYWJvcnRpb25fam9pbmVkJHRvdGFsX3ZvdGVzX3ExKSoxMDApLShzdW0obWRfYWJvcnRpb25fam9pbmVkJHRydW1wX3ZhbmNlMjQpL3N1bShtZF9hYm9ydGlvbl9qb2luZWQkdG90YWxfdm90ZXMyNCkqMTAwKVxuYGBgIn0= -->
+<pre class="r"><code>    # answer (rounded): 13.88 percentage points
+
+# calculate overall difference between pct of votes against q1 and pct of votes for trump
+(sum(md_abortion_joined$voted_no_q1)/sum(md_abortion_joined$total_votes_q1)*100)-(sum(md_abortion_joined$trump_vance24)/sum(md_abortion_joined$total_votes24)*100)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiWzFdIC0xMC42MDA2XG4ifQ== -->
 <pre><code>[1] -10.6006</code></pre>
 <!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuICAgICMgYW5zd2VyIChyb3VuZGVkKTogLTEwLjYwIHBlcmNlbnRhZ2UgcG9pbnRzXG5gYGAifQ== -->
+<pre class="r"><code>    # answer (rounded): -10.60 percentage points</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>

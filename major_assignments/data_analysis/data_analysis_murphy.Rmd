@@ -859,13 +859,23 @@ sum(md_abortion_joined$voted_no_q1)/sum(md_abortion_joined$total_votes_q1)*100
 
     # How did Maryland’s abortion ballot measure do in comparison to similar measures in other states? 
 
-        #
+        # There were 11 ballot measures in 10 states that pertained to abortion, with dueling measures in Nebraska. Ten of the measures aimed to protect the right to abortion, and seven of them passed their specific state's constitutional amendment threshold (though all but one got more than 50% of the vote). 
 
-    # To the presidential candidates? 
+        # Still, NOWHERE did a ballot measure perform better than in Maryland. The ballot measure received more than three-quarters of the vote. The other states with high passing margins were Nevada and New York, where  62% and 64% of voters voted to protect the right to abortion, respectively. This is monumental, because it means Maryland's ballot measure outperformed even the most successful ballot measures by more than 11 percentage points. 
 
-        #
+        # Maryland is known to be a very liberal state, but to be fair, so is New York. So what about Maryland made this issue so salient?
+
+    # How did it do in comparison to the presidential candidates? 
+
+        # The data show that 51,750 fewer people voted on Question 1 than voted for president. This is interesting, because it means that the Maryland Senate race, with over 3 million ballots cast, received the most overall votes.
+
+        # And although the Democratic Party's platform is generally seen as the most pro-reproductive freedom, the data also show that Maryland's ballot measure to protect the right to abortion WAY outperformed Harris. Looking at the vote share percentages, Question 1 passed with 76.06% of the vote, compared to Harris' 62.18% — a nearly 14-point margin. This means that a number of Republicans and third-party voters voted to protect the right to abortion.
+
+        # This is further supported by the fact that Trump outperformed the share of "no" votes on Question 1 by 10 percentage points statewide. In other words, there had to have been many people who were willing to support Trump but were unwilling to support the party's generally anti-abortion platform. This also means, however, that many third-party and write-in voters voted "yes" on Question 1, because this does not fully account for the 14-point margin between Harris' vote share and the share of "yes" votes.
 
     # How did different counties vote on the measure?
 
-        #
+        # In three counties — PG, Baltimore City and Montgomery — more people voted on Question 1 than voted for president, which is interesting.
+
+        # Question 1 only received less than 50% of the vote in one county, Garrett County, where 75% of voters supported Trump (the data have repeatedly shown this is the state's most conservative county). Still, even there, 44% of voters voted "yes" on Question 1. And in other conservative Maryland counties like Allegany and Caroline, where upward of two-thirds of voters voted for Trump, more than 55% of voters also supported Question 1. This clearly didn't just happen in Maryland — the fact that Missouri passed a ballot measure to protect abortion proves that. I recently read a research article that pointed out that many voters who were fearful about reproductive freedom may have been OK with voting for Trump BECAUSE abortion was on the ballot separately. This data doesn't prove or disprove anything, but it certainly supports the idea that this should be researched. 
 ```
